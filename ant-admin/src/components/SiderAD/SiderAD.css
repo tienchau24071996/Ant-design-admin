@@ -1,0 +1,13 @@
+.Sider{
+    flex: 0 0 256px!important;
+    max-width: 256px!important;
+    min-width: 256px!important;
+    width: 256px!important;
+    box-shadow: 2px 0 6px rgba(0,21,41,.35);
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
