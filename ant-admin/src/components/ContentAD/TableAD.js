@@ -1,86 +1,115 @@
-import React, { Component } from 'react';
-import { Table, Divider, Tag } from 'antd';
+import React, { Component } from "react";
+
+import { Table, Divider } from "antd";
+import axios from "axios";
 
 const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: text => <a href="/">{text}</a>,
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: tags => (
-        <span>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text, record) => (
-        <span>
-          <a href="/">Invite {record.name}</a>
-          <Divider type="vertical" />
-          <a href="/">Delete</a>
-        </span>
-      ),
-    },
-  ];
-  
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
+  {
+    title: "Firstname",
+    width: 100,
+    dataIndex: "firstName",
+    key: "firstName",
+    fixed: 'left'
+  },
+  {
+    title: "Gender",
+    width: 100,
+    dataIndex: "gender",
+    key: "gender",
+    fixed: 'left'
+  },
+  {
+    title: "Country",
+    dataIndex: "country",
+    key: "country"
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
+    width: 250
+  },
+  {
+    title: "Birthday",
+    dataIndex: "birthday",
+    key: "birthday"
+  },
+  {
+    title: "Company",
+    dataIndex: "companyName",
+    key: "companyName"
+  },
+  {
+    title: "GevmeEmail",
+    dataIndex: "gevmeEmail",
+    key: "gevmeEmail",
+    width: 250
+  },
+  {
+    title: "Prenium",
+    dataIndex: "isPrenium",
+    key: "isPrenium"
+  },
+  {
+    title: "Action",
+    key: 'operation',
+    fixed: 'right',
+    width: 120,
+    render: (text, record) => (
+      <span>
+        <a href="/">Edit</a>
+        <Divider type="vertical" />
+        <a href="/">Delete</a>
+      </span>
+    )
+  }
+];
 
 export default class TableAD extends Component {
-    render() {
-        return (
-            <div>
-                <Table columns={columns} dataSource={data} />
-            </div>
-        )
-    }
+  state = {
+    user: [],
+    newData: []
+  };
+
+  componentDidMount() {
+    axios
+      .get(`https://my.api.mockaroo.com/users.json?key=2460bd50`)
+      .then(res => {
+        const user = res.data;
+        this.setState({ user });
+      })
+      .then(() => {
+        this.formatData();
+      });
+  }
+
+  formatData = () => {
+    let { user } = this.state;
+    console.log(user);
+    let newData = [];
+    newData = user.map(item => ({
+      key: item.id,
+      firstName: item.first_name,
+      gender: item.gender,
+      country: item.country,
+      email: item.email,
+      birthday: item.birthday,
+      companyName: item.companyName,
+      gevmeEmail: item.gevmeEmail,
+      isPrenium: item.isPrenium ? "Yes" : "No"
+    }));
+    console.log(newData);
+    this.setState({
+      newData: newData
+    });
+  };
+
+  render() {
+    let { newData } = this.state;
+    return (
+      <div>
+        <Table columns={columns} dataSource={newData} scroll={{ x: 1300 }}/>
+      </div>
+    );
+  }
 }

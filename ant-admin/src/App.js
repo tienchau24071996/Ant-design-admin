@@ -13,14 +13,24 @@ import FooterAd from "./components/Footer/FooterAd";
 const { Content } = Layout;
 
 export default class App extends Component {
+  state = {
+    collapsed: false,
+  };
+
+  toggle = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
 
   render() {
+    let {collapsed} = this.state
     return (
       <Router>
         <Layout style={{ minHeight: "100vh" }}>
-            <SiderAD />
+            <SiderAD collapsed={collapsed} />
             <Layout>
-              <HeaderMenu />
+              <HeaderMenu toggle={this.toggle} />
               <Content style={{ margin: "0 16px" }}>
                 <Breadcrumb style={{ margin: "16px 0" }}>
                   <Breadcrumb.Item>User</Breadcrumb.Item>

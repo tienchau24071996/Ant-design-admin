@@ -6,29 +6,16 @@ import "./SiderAD.css";
 const { Sider } = Layout;
 
 export default class SiderAD extends Component {
-  state = {
-    collapsed: false,
-  };
-
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    });
-  };
-
+ 
   render() {
+    let {collapsed} = this.props
     return (
       <Sider
         trigger={null} collapsible 
-        collapsed={this.state.collapsed}
+        collapsed={collapsed}
         className="Sider"
       >
-          {/* <Icon
-              className="trigger"
-              style={{color:"#fff",fontSize:"22px",display:"flex",justifyContent:"center"}}
-              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            /> */}
+          
             <div className="logo">
               <Avatar size={64} src="https://media.licdn.com/dms/image/C510BAQGEoHkIdPtXow/company-logo_400_400/0?e=1580947200&v=beta&t=8ujYl6meTinWVsT02DdvKaYS4QBd5dImav5yEsGfb2Y" />    
               <h2 style={{color:"#fff",marginBottom:0,paddingLeft: "10px"}}>Spirit Labs</h2>
@@ -44,14 +31,14 @@ export default class SiderAD extends Component {
           <Menu.Item key="2">
             <NavLink to="/Table" >
               <Icon type="desktop" />
-              <span>Table</span>
+              <span>User Managerment</span>
             </NavLink>
           </Menu.Item>
 
           <Menu.Item key="3">
             <NavLink to="/User" >
               <Icon type="user" />
-              <span>User</span>
+              <span>Edit User</span>
             </NavLink>
           </Menu.Item>
           

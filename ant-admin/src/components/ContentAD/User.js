@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Row, Col, Avatar } from "antd";
+// import { Form, Input, Row, Col, Avatar } from "antd";
 import axios from 'axios'
 
 export default class User extends Component {
@@ -22,7 +22,7 @@ export default class User extends Component {
     return (
       <div>
         <h3>Basic Setting</h3>
-        <Form>
+        {/* <Form>
           <Row>
             <Col span={8}>
               <Form.Item label="E-mail">
@@ -57,7 +57,7 @@ export default class User extends Component {
                 <Avatar size={128} src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" />    
             </Col>
           </Row>
-        </Form>
+        </Form> */}
       </div>
     );
   }
