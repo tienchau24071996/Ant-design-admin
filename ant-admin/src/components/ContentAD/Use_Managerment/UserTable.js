@@ -65,7 +65,7 @@ const columns = [
   }
 ];
 
-export default class TableAD extends Component {
+export default class UserTable extends Component {
   state = {
     user: [],
     newData: []
@@ -73,7 +73,7 @@ export default class TableAD extends Component {
 
   componentDidMount() {
     axios
-      .get(`https://my.api.mockaroo.com/users.json?key=2460bd50`)
+      .get(`https://my.api.mockaroo.com/userclient.json?key=c95ad840`)
       .then(res => {
         const user = res.data;
         this.setState({ user });

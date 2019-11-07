@@ -29,7 +29,7 @@ export default class HeaderMenu extends Component {
     let { toggle } = this.props;
     return (
       <Header className="header">
-        <Row>
+        <Row className="row-navbar">
           <Col span={12}>
             <Icon
               className="trigger"

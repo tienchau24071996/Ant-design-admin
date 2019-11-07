@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import "./SiderAD.css";
 
 const { Sider } = Layout;
+const { SubMenu } = Menu;
 
 export default class SiderAD extends Component {
  
@@ -28,17 +29,29 @@ export default class SiderAD extends Component {
               </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="2">
-            <NavLink to="/Table" >
-              <Icon type="desktop" />
-              <span>User Managerment</span>
-            </NavLink>
-          </Menu.Item>
+          <SubMenu key="sub1"
+            title={
+              <span>
+                <Icon type="mail" />
+                <span>User Managerment</span>
+              </span>
+          }>
+            <Menu.Item key="2">
+              <NavLink to="/Table-User" >
+                User
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <NavLink to="/Table-Admin" >
+                Admin
+              </NavLink>
+            </Menu.Item>
+          </SubMenu>
 
-          <Menu.Item key="3">
+          <Menu.Item key="4">
             <NavLink to="/User" >
               <Icon type="user" />
-              <span>Edit User</span>
+              <span>User Profile</span>
             </NavLink>
           </Menu.Item>
           
