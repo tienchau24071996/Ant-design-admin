@@ -1,9 +1,18 @@
 import React, { Component } from "react";
 
 import { Table, Divider } from "antd";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 
+
 const columns = [
+  {
+    title: "ID",
+    width: 100,
+    dataIndex: "id",
+    key: "id",
+    fixed: 'left'
+  },
   {
     title: "Firstname",
     width: 100,
@@ -55,13 +64,16 @@ const columns = [
     key: 'operation',
     fixed: 'right',
     width: 120,
-    render: (text, record) => (
-      <span>
-        <a href="/">Edit</a>
-        <Divider type="vertical" />
-        <a href="/">Delete</a>
-      </span>
-    )
+    render: (text, record) => {
+      console.log(record);
+      return (
+          <span>
+            <NavLink to={`/managerment/user/update?id=${record.id}`}>Edit</NavLink>
+            <Divider type="vertical" />
+            <a href="/">Delete</a>
+          </span>
+      )
+    }
   }
 ];
 
@@ -89,6 +101,7 @@ export default class UserTable extends Component {
     let newData = [];
     newData = user.map(item => ({
       key: item.id,
+      id: item.id,
       firstName: item.first_name,
       gender: item.gender,
       country: item.country,
