@@ -76,7 +76,7 @@ export default class UserTable extends Component {
       .get(`https://my.api.mockaroo.com/userclient.json?key=c95ad840`)
       .then(res => {
         const user = res.data;
-        this.setState({ user });
+        this.setState({ user});
       })
       .then(() => {
         this.formatData();

@@ -9,6 +9,7 @@ import UserProfile from "./components/ContentAD/UserProfile";
 import HeaderMenu from "./components/HeaderMenu/HeaderMenu";
 import SiderAD from "./components/SiderAD/SiderAD";
 import FooterAd from "./components/Footer/FooterAd";
+import UserAdmin from "./components/ContentAD/Use_Managerment/UserAdmin"
 
 const { Content } = Layout;
 
@@ -48,7 +49,7 @@ export default class App extends Component {
                       <UserTable />
                     </Route>
                     <Route path="/Table-Admin">
-                      <div>admin</div>
+                      <UserAdmin/>
                     </Route>
                     <Route path="/User">
                       <UserProfile />
