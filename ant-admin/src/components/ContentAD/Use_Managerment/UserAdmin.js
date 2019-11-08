@@ -1,36 +1,64 @@
 import React, { Component } from "react";
-import { Table, Divider,Button,Popconfirm } from "antd";
+import { Table, Divider, Button } from "antd";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 
 const columns = [
   {
     title: "Fist Name",
     dataIndex: "first_name",
-    key: "FistName",
+    key: "FistName"
   },
   {
-    title: "LastName",
+    title: "Last Name",
     dataIndex: "last_name",
     key: "LastName"
   },
   {
-    title: "Email Address",
-    dataIndex: "email",
-    key: "address"
-  },
-  {
     title: "Gender",
-    dataIndex: "gender",
+    dataIndex: "Gender",
     key: "Gender"
   },
   {
+    title: "Country",
+    dataIndex: "Country",
+    key: "Country"
+  },
+  {
+    title: "Email Address",
+    dataIndex: "Email",
+    key: "Email"
+  },
+  {
+    title: "Birthday",
+    dataIndex: "Birthday",
+    key: "Birthday"
+  },
+  {
+    title: "Company",
+    dataIndex: "Company",
+    key: "Company"
+  },
+  {
+    title: "GevmeEmail",
+    dataIndex: "GevmeEmail",
+    key: "GevmeEmail"
+  },
+  {
+    title: "Prenium",
+    dataIndex: "Prenium",
+    key: "Prenium"
+  },
+  {
     title: "Action",
-    key: "action",
+    key: 'operation',
+    fixed: 'right',
+    width: 120,
     render: (text, record) => (
       <span>
-        <a>Edit</a>
+        <a href="/">Edit</a>
         <Divider type="vertical" />
-        <a>Delete</a>
+        <a href="/">Delete</a>
       </span>
     )
   }
@@ -38,11 +66,12 @@ const columns = [
 
 export default class UserAdmin extends Component {
   state = {
-    user: []
+    user: [],
+    newData: []
   };
   componentDidMount() {
     axios
-      .get(`https://my.api.mockaroo.com/useradmin.json?key=3615c370`)
+      .get(`https://my.api.mockaroo.com/newadmin.json?key=3615c370`)
       .then(res => {
         const user = res.data;
         this.setState({ user });
@@ -51,29 +80,39 @@ export default class UserAdmin extends Component {
         this.formatData();
       });
   }
-  formatData () {
+  formatData = () => {
     let { user } = this.state;
     let newData = [];
     newData = user.map(item => ({
+      key: item.id,
+      first_name: item.first_name,
+      last_name: item.last_name,
+      Gender: item.Gender,
+      Country: item.Country,
+      Email: item.Email,
+      Birthday: item.Birthday,
+      Company: item.Company,
+      GevmeEmail: item.GevmeEmail,
+      Prenium: item.Prenium ? "Yes" : "No"
     }));
-    console.log(newData);
     this.setState({
       newData: newData
     });
-
-  }
+  };
 
 
   render() {
-    console.log(this.state.user);
-    let {user} = this.state
+    let { newData } = this.state;
 
     return (
       <div>
-                  <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
-          Add a row
+        <Button
+          type="primary"
+          style={{ marginBottom: 16 }}
+        >
+          <NavLink to="/managerment/admin/add" >Add a row</NavLink>
         </Button>
-        <Table columns={columns} dataSource={user} rowKey="id" />
+        <Table columns={columns} dataSource={(newData)} rowKey="id" scroll={{ x: 1300 }} />
       </div>
     );
   }
