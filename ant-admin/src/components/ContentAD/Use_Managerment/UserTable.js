@@ -11,21 +11,27 @@ const columns = [
     width: 100,
     dataIndex: "id",
     key: "id",
-    fixed: 'left'
+    fixed: "left"
   },
   {
-    title: "Firstname",
+    title: "First name",
     width: 100,
     dataIndex: "firstName",
     key: "firstName",
-    fixed: 'left'
+    fixed: "left"
+  },
+  {
+    title: "Last name",
+    width: 100,
+    dataIndex: "lastName",
+    key: "lastName",
+    fixed: "left"
   },
   {
     title: "Gender",
     width: 100,
     dataIndex: "gender",
-    key: "gender",
-    fixed: 'left'
+    key: "gender"
   },
   {
     title: "Country",
@@ -61,18 +67,20 @@ const columns = [
   },
   {
     title: "Action",
-    key: 'operation',
-    fixed: 'right',
+    key: "operation",
+    fixed: "right",
     width: 120,
     render: (text, record) => {
       console.log(record);
       return (
-          <span>
-            <NavLink to={`/managerment/user/update?id=${record.id}`}>Edit</NavLink>
-            <Divider type="vertical" />
-            <a href="/">Delete</a>
-          </span>
-      )
+        <span>
+          <NavLink to={`/managerment/user/update?id=${record.id}`}>
+            Edit
+          </NavLink>
+          <Divider type="vertical" />
+          <a href="/">Delete</a>
+        </span>
+      );
     }
   }
 ];
@@ -103,6 +111,7 @@ export default class UserTable extends Component {
       key: item.id,
       id: item.id,
       firstName: item.first_name,
+      lastName: item.last_name,
       gender: item.gender,
       country: item.country,
       email: item.email,
@@ -121,7 +130,7 @@ export default class UserTable extends Component {
     let { newData } = this.state;
     return (
       <div>
-        <Table columns={columns} dataSource={newData} scroll={{ x: 1300 }}/>
+        <Table columns={columns} dataSource={newData} scroll={{ x: 1500 }}></Table>
       </div>
     );
   }

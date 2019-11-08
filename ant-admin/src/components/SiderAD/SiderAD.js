@@ -32,7 +32,7 @@ export default class SiderAD extends Component {
           <SubMenu key="sub1"
             title={
               <span>
-                <Icon type="mail" />
+                <Icon type="user" />
                 <span>User Managerment</span>
               </span>
           }>
@@ -50,7 +50,7 @@ export default class SiderAD extends Component {
 
           <Menu.Item key="4">
             <NavLink to="/user" >
-              <Icon type="user" />
+              <Icon type="mail" />
               <span>User Profile</span>
             </NavLink>
           </Menu.Item>
