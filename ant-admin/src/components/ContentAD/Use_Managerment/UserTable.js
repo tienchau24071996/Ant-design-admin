@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 
 import { Table, Divider } from "antd";
 import { NavLink } from "react-router-dom";
@@ -71,7 +71,6 @@ const columns = [
     fixed: "right",
     width: 120,
     render: (text, record) => {
-      console.log(record);
       return (
         <span>
           <NavLink to={`/managerment/user/update?id=${record.id}`}>
@@ -85,7 +84,7 @@ const columns = [
   }
 ];
 
-export default class UserTable extends Component {
+export default class UserTable extends PureComponent {
   state = {
     user: [],
     newData: []
@@ -105,7 +104,6 @@ export default class UserTable extends Component {
 
   formatData = () => {
     let { user } = this.state;
-    console.log(user);
     let newData = [];
     newData = user.map(item => ({
       key: item.id,
@@ -120,14 +118,13 @@ export default class UserTable extends Component {
       gevmeEmail: item.gevmeEmail,
       isPrenium: item.isPrenium ? "Yes" : "No"
     }));
-    console.log(newData);
     this.setState({
       newData: newData
     });
   };
 
   render() {
-    let { newData } = this.state;
+    let { newData } = this.state
     return (
       <div>
         <Table columns={columns} dataSource={newData} scroll={{ x: 1500 }}></Table>

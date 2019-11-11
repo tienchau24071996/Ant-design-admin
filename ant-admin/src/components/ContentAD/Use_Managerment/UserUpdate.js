@@ -4,34 +4,51 @@ import {
   Input,
   Row,
   Col,
-  Avatar,
   Select,
   DatePicker,
-  Button
+  Button,
+  notification,
+  Upload,
+  Icon,
+  message
 } from "antd";
 import moment from "moment";
 import axios from "axios";
+import "./UserUpdate.css";
 
 const { Option } = Select;
 const dateFormat = "MM/DD/YYYY";
 
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener("load", () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+
+function beforeUpload(file) {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    message.error("You can only upload JPG/PNG file!");
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error("Image must smaller than 2MB!");
+  }
+  return isJpgOrPng && isLt2M;
+}
+
 export default class UserUpdate extends Component {
   state = {
-    userDetail: {}, 
-    
-
+    userDetail: {
+      birthday: ""
+    },
+    loading: false
   };
-
-  // _handleSubmit = () => { 
-  //   axios.post('', this.state.userDetail) 
-
-  // }
 
   componentDidMount() {
     axios
       .get(`https://my.api.mockaroo.com/userdetail.json?key=98993900`)
       .then(res => {
-        console.log(res.data);
         const userDetail = res.data;
         this.setState({
           userDetail
@@ -39,34 +56,116 @@ export default class UserUpdate extends Component {
       });
   }
 
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      userDetail: {
+        ...prevState.userDetail,
+        [name]: value
+      }
+    }));
+  };
+
+  handleChangeSelect = event => {
+    this.setState(prevState => ({
+      userDetail: {
+        ...prevState.userDetail,
+        gender: event
+      }
+    }));
+  };
+
+  handleChangeDate = (event, t) => {
+    this.setState(prevState => ({
+      userDetail: {
+        ...prevState.userDetail,
+        birthday: t
+      }
+    }));
+  };
+
+  _onSubmit = type => ()  => {
+    console.log(this.state.userDetail);
+    notification[type]({
+      message: "Update successful",
+      description:
+        "This is the content of the notification. This is the content of the notification. This is the content of the notification."
+    });
+  };
+
+  handleChangeUpload = info => {
+    if (info.file.status === "uploading") {
+      this.setState({ loading: true });
+      return;
+    }
+    if (info.file.status === "done") {
+      getBase64(info.file.originFileObj, imageUrl =>
+        this.setState({
+          imageUrl,
+          loading: false
+        })
+      );
+    }
+  };
+
   render() {
-    let { userDetail } = this.state
-    console.log(userDetail.gender);
-    
+    let { userDetail } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? "loading" : "plus"} />
+        <div className="ant-upload-text">Upload Avatar</div>
+      </div>
+    );
+    const { imageUrl } = this.state;
     return (
       <div>
         <h3>Basic Setting</h3>
-        <Form onSubmit={this._handleSubmit}>
+        <Form>
           <Row>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={6}>
+              <Upload
+                style={{ textAlign: "center" }}
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                beforeUpload={beforeUpload}
+                onChange={this.handleChangeUpload}
+              >
+                {imageUrl ? (
+                  <img
+                    className="avatar-image"
+                    src={imageUrl}
+                    alt="avatar"
+                    style={{ width: "100%" }}
+                  />
+                ) : (
+                  uploadButton
+                )}
+              </Upload>
+            </Col>
+
+            <Col xs={24} sm={24} md={18}>
               <Row>
                 <Col span={12} style={{ paddingRight: "30px" }}>
                   <Form.Item>
                     <span>First name</span>
-                    {
-                      userDetail.first_name &&(
-                        <Input
+                    <Input
+                      name="first_name"
                       value={userDetail.first_name}
                       onChange={this.handleChange}
                     />
-                      )
-                    }
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item>
                     <span>Last name</span>
-                    <Input value={userDetail.last_name} />
+                    <Input
+                      name="last_name"
+                      value={userDetail.last_name}
+                      onChange={this.handleChange}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -75,21 +174,29 @@ export default class UserUpdate extends Component {
                 <Col span={12} style={{ paddingRight: "30px" }}>
                   <Form.Item>
                     <span>Gender</span>
-          
-                      <Select value={userDetail.gender}>
-                        <Option value="Male">Male</Option>
-                        <Option value="Female">Female</Option>
-                        <Option value="Other">Other</Option>
-                      </Select>
-                  
+                    <Select
+                      name="gender"
+                      onChange={this.handleChangeSelect}
+                      value={userDetail.gender}
+                    >
+                      <Option value="Male">Male</Option>
+                      <Option value="Female">Female</Option>
+                      <Option value="Other">Other</Option>
+                    </Select>
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item>
                     <span>Birthday</span>
                     <DatePicker
-                      value={moment("2/27/2019", dateFormat)}
+                      name="date"
+                      value={
+                        !userDetail.birthday
+                          ? null
+                          : moment(userDetail.birthday, dateFormat)
+                      }
                       format={dateFormat}
+                      onChange={this.handleChangeDate}
                       style={{ width: "100%" }}
                     />
                   </Form.Item>
@@ -98,12 +205,20 @@ export default class UserUpdate extends Component {
 
               <Form.Item>
                 <span>Email</span>
-                <Input value={userDetail.email} />
+                <Input
+                  name="email"
+                  onChange={this.handleChange}
+                  value={userDetail.email}
+                />
               </Form.Item>
 
               <Form.Item>
                 <span>Country</span>
-                <Input value={userDetail.country} />
+                <Input
+                  name="country"
+                  onChange={this.handleChange}
+                  value={userDetail.country}
+                />
               </Form.Item>
 
               <Form.Item>
@@ -117,14 +232,14 @@ export default class UserUpdate extends Component {
               </Form.Item>
 
               <Form.Item style={{ textAlign: "right" }}>
-                <Button type="primary" htmlType="submit">Update</Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={this._onSubmit("success")}
+                >
+                  Update
+                </Button>
               </Form.Item>
-            </Col>
-            <Col span={16} style={{ textAlign: "center" }}>
-              <Avatar
-                size={128}
-                src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
-              />
             </Col>
           </Row>
         </Form>
