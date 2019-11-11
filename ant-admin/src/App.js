@@ -43,21 +43,19 @@ export default class App extends Component {
                   <Route exact path="/">
                     <Dashboard />
                   </Route>
-                  <Route path="/Dashboard">
+                  <Route path="/dashboard">
                     <Dashboard />
                   </Route>
-                  <Route path="/Table-User">
+                  <Route path="/managerment/user">
                     <UserTable />
                   </Route>
-                  <Route path="/Table-Admin">
+                  <Route exact path="/managerment/admin">
                     <UserAdmin />
                   </Route>
-
                   <Route path="/managerment/admin/add">
                     <AddAdmin />
                   </Route>
-
-                  <Route path="/User">
+                  <Route path="/user">
                     <UserProfile />
                   </Route>
                 </Switch>

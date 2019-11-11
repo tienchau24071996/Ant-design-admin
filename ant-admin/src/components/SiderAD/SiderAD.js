@@ -23,7 +23,7 @@ export default class SiderAD extends Component {
             </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]} >
           <Menu.Item key="1">
-              <NavLink to="/Dashboard" >
+              <NavLink to="/dashboard" >
                 <Icon type="pie-chart" />
                 <span>Dashboard</span>
               </NavLink>
@@ -37,12 +37,12 @@ export default class SiderAD extends Component {
               </span>
           }>
             <Menu.Item key="2">
-              <NavLink to="/Table-User" >
+              <NavLink to="/managerment/user" >
                 User
               </NavLink>
             </Menu.Item>
             <Menu.Item key="3">
-              <NavLink to="/Table-Admin" >
+              <NavLink to="/managerment/admin" >
                 Admin
               </NavLink>
             </Menu.Item>

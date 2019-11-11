@@ -74,7 +74,9 @@ export default class UserAdmin extends Component {
       .get(`https://my.api.mockaroo.com/newadmin.json?key=3615c370`)
       .then(res => {
         const user = res.data;
-        this.setState({ user });
+        this.setState({ 
+          user
+         });
       })
       .then(() => {
         this.formatData();
@@ -103,7 +105,6 @@ export default class UserAdmin extends Component {
 
   render() {
     let { newData } = this.state;
-
     return (
       <div>
         <Button
@@ -112,7 +113,7 @@ export default class UserAdmin extends Component {
         >
           <NavLink to="/managerment/admin/add" >Add a row</NavLink>
         </Button>
-        <Table columns={columns} dataSource={(newData)} rowKey="id" scroll={{ x: 1300 }} />
+        <Table columns={columns} dataSource={(newData)}  scroll={{ x: 1300 }} />
       </div>
     );
   }

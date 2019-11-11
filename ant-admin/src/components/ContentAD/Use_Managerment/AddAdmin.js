@@ -1,107 +1,148 @@
 import React, { Component } from "react";
-import {
-  Form,
-  Input,
-  Row,
-  Col,
-  AutoComplete,
-  Button,
-  Select,
-  DatePicker
-} from "antd";
+import { Form, Input, Row, Col, Button, Select, DatePicker } from "antd";
 import { NavLink } from "react-router-dom";
-import moment from "moment";
-import axios from "axios";
-import validator from 'validator';
-
+import validator from "validator";
 
 const dateFormatList = ["MM/DD/YYYY", "MM/DD/YY"];
 
-const InputGroup = Input.Group;
 const { Option } = Select;
 export default class AddAdmin extends Component {
   state = {
-    dataSource: [],
-    EmailError : false
+    emailError: false,
+    dataSource: {
+    first_name: "",
+    last_name: "",
+    country: "",
+    email: "",
+    company: "",
+    gevmeEmail: "nhanle434@gmail.com",
+    gender: "",
+    date: null,
+    prenium:"Yes"
+    },
+    
   };
   handleAdd = () => {
-    axios({
-      method: "post",
-      url: "https://my.api.mockaroo.com/newadmin.json?key=3615c370",
-      data: {}
+    console.log(this.state.dataSource);
+
+
+  };
+  handleGetDate = (moment, dateString) => {
+    this.setState( prevState => ({
+      dataSource:{
+        ...prevState.dataSource,
+      date: dateString
+      }
+    }));
+  };
+
+  handleSelect = event => {
+    this.setState( prevState =>({
+      dataSource:{
+        ...prevState.dataSource,
+      gender: event
+      }
+    }));
+  };
+
+  handleGetValue = event => {
+    const { name, value } = event.target
+    this.setState( prevState => ({
+      dataSource : {
+        ...prevState.dataSource,
+        [name]: value
+      }
+     
+    }));
+
+    this.handleErrorEmail(event.target.value);
+  };
+
+  handleErrorEmail = value => {
+    this.setState({
+      emailError: !validator.isEmail(value)
     });
   };
-  handleErrorEmail = () => (event) => {
-    let {EmailError} = this.state
-    const email = event;
-    if (!validator.isEmail(email)) {
-      this.setState({EmailError : false})
-    }   
-    this.setState({EmailError : true}) 
-    console.log(email)
-  }
+
   render() {
-    let {EmailError} = this.state
+    let { emailError } = this.state;
     return (
       <div>
         <h3>Basic Setting</h3>
         <Form>
           <Row>
             <Col span={8}>
-              <Form.Item label="Fist Name">
-                <Input />
+              <Form.Item label="First name">
+                <Input
+                  onChange={this.handleGetValue}
+                  value={this.state.dataSource.first_name}
+                  name="first_name"
+                />
               </Form.Item>
               <Form.Item label="Last Name">
-                <Input />
+                <Input
+                  onChange={this.handleGetValue}
+                  value={this.state.dataSource.last_name}
+                  name="last_name"
+                />
               </Form.Item>
               <Form.Item label="Gender">
-                <Select defaultValue="Gender">
+                <Select
+                  onChange={this.handleSelect}
+                  value={this.state.dataSource.gender}
+                  name="gender"
+                >
                   <Option value="Female">Female</Option>
                   <Option value="Male">Male</Option>
                 </Select>{" "}
               </Form.Item>
               <Form.Item label="Country">
-                <Input />
+                <Input
+                  onChange={this.handleGetValue}
+                  value={this.state.dataSource.country}
+                  name="country"
+                />
               </Form.Item>
               <Form.Item label="Email">
-                <InputGroup compact>
-                  <AutoComplete
-                    onChange={this.handleErrorEmail()}
-                    name="email"
-                    id="email"
-                    dataSource={this.state.dataSource}
-                    style={{ width: "100%" }}
-                  />
-                  {EmailError ?(
-                    <div>Hay nhap email hop le</div>
-                  ): null}
-                </InputGroup>
+                <Input
+                  onChange={this.handleGetValue}
+                  value={this.state.dataSource.email}
+                  name="email"
+                />
+                {emailError ? (
+                  <div style={{ color: "red" }}>Hãy Nhập Mail Hợp Lệ</div>
+                ) : null}
               </Form.Item>
               <Form.Item label="Birthday">
                 <DatePicker
-                  defaultValue={moment("10/29/1998", dateFormatList[0])}
+                  onChange={this.handleGetDate}
                   format={dateFormatList}
                   style={{ width: "100%" }}
                 />
               </Form.Item>
               <Form.Item label="Company">
-                <Input />
+                <Input
+                  onChange={this.handleGetValue}
+                  value={this.state.dataSource.company}
+                  name="company"
+                />
               </Form.Item>
               <Form.Item label="GevmeEmail">
-                <InputGroup compact>
-                  <AutoComplete
-                    dataSource={this.state.dataSource}
-                    style={{ width: "100%" }}
-
-                    // onChange={this.ErrorEmail()}
-                  />
-                </InputGroup>
+                <Input
+                  disabled
+                  onChange={this.handleGetValue}
+                  value="nhanle434@gmail.com"
+                  name="gevmeEmail"
+                />
               </Form.Item>
               <Form.Item label="Prenium">
-                <Select defaultValue="true">
-                  <Option value="true">Yes</Option>
-                  <Option value="false">No</Option>
-                </Select>{" "}
+                <Input
+                 onChange={this.handleGetValue}
+                value="Yes"
+                name="prenium"
+                disabled 
+                />
+                
               </Form.Item>
             </Col>
           </Row>
@@ -110,7 +151,7 @@ export default class AddAdmin extends Component {
             type="primary"
             style={{ marginBottom: 16 }}
           >
-            <NavLink to="">Add</NavLink>
+            <NavLink to="/managerment/admin">Add</NavLink>
           </Button>
         </Form>
       </div>
