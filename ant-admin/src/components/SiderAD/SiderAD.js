@@ -46,15 +46,7 @@ export default class SiderAD extends Component {
                 Admin
               </NavLink>
             </Menu.Item>
-          </SubMenu>
-
-          <Menu.Item key="4">
-            <NavLink to="/user" >
-              <Icon type="mail" />
-              <span>User Profile</span>
-            </NavLink>
-          </Menu.Item>
-          
+          </SubMenu> 
         </Menu>
       </Sider>
     );

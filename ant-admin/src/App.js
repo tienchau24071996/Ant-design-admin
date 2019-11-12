@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import "./App.css";
-// import Home from './view/Home'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Layout, Breadcrumb } from "antd";
 import Dashboard from "./components/ContentAD/Dashboard";
 import UserTable from "./components/ContentAD/Use_Managerment/UserTable";
 import UserUpdate from "./components/ContentAD/Use_Managerment/UserUpdate";
-import UserProfile from "./components/ContentAD/UserProfile";
 import HeaderMenu from "./components/HeaderMenu/HeaderMenu";
 import SiderAD from "./components/SiderAD/SiderAD";
 import FooterAd from "./components/Footer/FooterAd";
@@ -53,9 +51,6 @@ export default class App extends Component {
                     </Route>
                     <Route path="/managerment/admin">
                       <div>admin</div>
-                    </Route>
-                    <Route path="/user">
-                      <UserProfile />
                     </Route>
                   </Switch>
                 </div>

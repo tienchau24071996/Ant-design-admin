@@ -118,8 +118,7 @@ export default class UserUpdate extends Component {
     );
     const { imageUrl } = this.state;
     return (
-      <div>
-        <h3>Basic Setting</h3>
+      <div style={{paddingTop:"14px"}}>
         <Form>
           <Row>
             <Col xs={24} sm={24} md={6}>
