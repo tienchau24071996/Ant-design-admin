@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Divider, Button } from "antd";
+import { Table, Divider, Button, Pagination, Icon, Popover } from "antd";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 
@@ -51,14 +51,22 @@ const columns = [
   },
   {
     title: "Action",
-    key: 'operation',
-    fixed: 'right',
-    width: 120,
+    key: "operation",
+    fixed: "right",
+    width: 80,
     render: (text, record) => (
       <span>
-        <a href="/">Edit</a>
+        <NavLink to={`admin/update?id=${record.id}`}>
+          <Popover content="Edit Admin">
+            <Icon type="edit" />
+          </Popover>
+        </NavLink>
         <Divider type="vertical" />
-        <a href="/">Delete</a>
+        <Popover content="Delete Admin">
+          <a href="/">
+            <Icon type="delete" />
+          </a>
+        </Popover>
       </span>
     )
   }
@@ -70,22 +78,14 @@ export default class UserAdmin extends Component {
     newData: []
   };
   componentDidMount() {
-    axios
-      .get(`https://my.api.mockaroo.com/newadmin.json?key=3615c370`)
-      .then(res => {
-        const user = res.data;
-        this.setState({ 
-          user
-         });
-      })
-      .then(() => {
-        this.formatData();
-      });
+    this.getData();
   }
+
   formatData = () => {
     let { user } = this.state;
     let newData = [];
     newData = user.map(item => ({
+      id: item.id,
       key: item.id,
       first_name: item.first_name,
       last_name: item.last_name,
@@ -101,19 +101,46 @@ export default class UserAdmin extends Component {
       newData: newData
     });
   };
+  handleChangePage = (page, pageSize) => {
+    this.getData(page);
+  };
 
+  getData = (page = 1) => {
+    axios
+      .get(
+        `http://5dcb85f734d54a0014315051.mockapi.io/api/admin?page=${page}&limit=10`
+      )
+      .then(res => {
+        const user = res.data;
+        this.setState({
+          user
+        });
+      })
+      .then(() => {
+        this.formatData();
+      });
+  };
 
   render() {
     let { newData } = this.state;
+    
     return (
       <div>
-        <Button
-          type="primary"
-          style={{ marginBottom: 16 }}
-        >
-          <NavLink to="/managerment/admin/add" >Add a row</NavLink>
+        <Button type="primary" style={{ marginBottom: 16 }}>
+          <NavLink to="/managerment/admin/add">Add a row</NavLink>
         </Button>
-        <Table columns={columns} dataSource={(newData)}  scroll={{ x: 1300 }} />
+        <Table
+          columns={columns}
+          dataSource={newData}
+          scroll={{ x: 1300 }}
+          pagination={false}
+        />
+        <Pagination
+          defaultCurrent={1}
+          total={50}
+          onChange={this.handleChangePage}
+          style={{textAlign:"end",paddingTop:"5px"}}
+        />
       </div>
     );
   }
