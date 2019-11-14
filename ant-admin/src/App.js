@@ -43,7 +43,7 @@ export default class App extends Component {
                     <Route path="/dashboard">
                       <Dashboard />
                     </Route>
-                    <Route exact path="/managerment/user">
+                    <Route exact path="/managerment/user/page=1">
                       <UserTable />
                     </Route>
                     <Route path="/managerment/user/update">

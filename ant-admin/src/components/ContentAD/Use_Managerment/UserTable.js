@@ -1,8 +1,21 @@
 import React, { PureComponent } from "react";
 
-import { Table, Divider, Popconfirm, Pagination } from "antd";
+import { Table, Divider, Popconfirm, Pagination, Icon, Popover } from "antd";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import './UserUpdate.css'
+
+const editUser = (
+  <div>
+    <span>Edit user</span>
+  </div>
+);
+
+const deleteUser = (
+  <div>
+    <span>Delete user</span>
+  </div>
+);
 
 export default class UserTable extends PureComponent {
   constructor(props) {
@@ -34,7 +47,7 @@ export default class UserTable extends PureComponent {
       },
       {
         title: "Country",
-        maxWidth: 150,
+        width: 200,
         dataIndex: "country",
         key: "country"
       },
@@ -68,22 +81,29 @@ export default class UserTable extends PureComponent {
       {
         title: "Action",
         key: "operation",
-        width: 120,
+        width: 80,
         fixed: "right",
         render: (text, record) => {
           return (
             <span>
               <NavLink to={`/managerment/user/update?id=${record.id}`}>
-                Edit
+                <Popover content={editUser}>
+                  <Icon type="edit" />
+                </Popover>
               </NavLink>
               <Divider type="vertical" />
-              {
-                this.state.newData.length >= 1 ? (
-                  <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                    <a href="/">Delete</a>
-                  </Popconfirm>
-                ) : null
-              }
+              {this.state.newData.length >= 1 ? (
+                <Popconfirm
+                  title="Sure to delete?"
+                  onConfirm={() => this.handleDelete(record.key)}
+                >
+                  <a href="/">
+                    <Popover content={deleteUser}>
+                      <Icon type="delete" />
+                    </Popover>
+                  </a>
+                </Popconfirm>
+              ) : null}
             </span>
           );
         }
@@ -92,12 +112,12 @@ export default class UserTable extends PureComponent {
 
     this.state = {
       user: [],
-      newData: [],
+      newData: []
     };
   }
 
   componentDidMount() {
-   this.getData()
+    this.getData();
   }
 
   formatData = () => {
@@ -124,6 +144,10 @@ export default class UserTable extends PureComponent {
   handleDelete = key => {
     const newData = [...this.state.newData];
     this.setState({ newData: newData.filter(item => item.key !== key) });
+    axios.delete(`https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${key}`, newData )
+    .then(res => {
+      console.log(res.data);
+    })
   };
 
   handleSave = row => {
@@ -132,14 +156,17 @@ export default class UserTable extends PureComponent {
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
-      ...row,
+      ...row
     });
     this.setState({ newData });
+    
   };
 
   getData(page = 1) {
     axios
-      .get(`https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient?p=${page}&l=10`)
+      .get(
+        `https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient?p=${page}&l=10`
+      )
       .then(res => {
         const user = res.data;
         this.setState({ user });
@@ -148,15 +175,13 @@ export default class UserTable extends PureComponent {
         this.formatData();
       });
   }
-  
 
   handlePagination = (page, pageSize) => {
-    console.log(page);
-    this.getData(page)
-  }
+    this.getData(page);
+  };
 
   render() {
-    let { newData } = this.state
+    let { newData } = this.state;
     const columns = this.columns.map(col => {
       if (!col.editable) {
         return col;
@@ -168,18 +193,27 @@ export default class UserTable extends PureComponent {
           dataIndex: col.dataIndex,
           title: col.title,
           handleSave: this.handleSave
-        }),
+        })
       };
     });
 
-    console.log(newData);
+    console.log(newData)
     
     return (
       <div>
-        <Table columns={columns} dataSource={newData} scroll={{ x: 1500 }} pagination={false} >
-            
-        </Table>
-        <Pagination defaultCurrent={1} total={30} onChange={this.handlePagination} />
+        
+        <Table
+          columns={columns}
+          dataSource={newData}
+          scroll={{ x: 1600 }}
+          pagination={false}
+        ></Table>
+        <Pagination
+          style={{ textAlign: "right", paddingTop: "20px" }}
+          defaultCurrent={1}
+          total={30}
+          onChange={this.handlePagination}
+        />
       </div>
     );
   }

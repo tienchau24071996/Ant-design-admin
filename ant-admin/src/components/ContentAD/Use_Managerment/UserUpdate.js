@@ -44,16 +44,26 @@ export default class UserUpdate extends Component {
     },
     loading: false
   };
-
+  
   componentDidMount() {
     axios
-      .get(`https://my.api.mockaroo.com/userdetail.json?key=98993900`)
+      .get(`https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${this.getInfoURL()}`)
       .then(res => {
         const userDetail = res.data;
+        console.log(userDetail);
+        
         this.setState({
           userDetail
         });
       });
+  }
+
+  getInfoURL() {
+    const url = window.location
+    const urlString = new URL(url)
+    const id = urlString.searchParams.get('id')
+
+    return id
   }
 
   handleChange = event => {
@@ -91,6 +101,11 @@ export default class UserUpdate extends Component {
       description:
         "This is the content of the notification. This is the content of the notification. This is the content of the notification."
     });
+    let {userDetail} = this.state
+    axios.put(`https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${this.getInfoURL()}`, userDetail)
+      .then(res => {
+        console.log(res.data);
+      })
   };
 
   handleChangeUpload = info => {
@@ -110,13 +125,15 @@ export default class UserUpdate extends Component {
 
   render() {
     let { userDetail } = this.state;
+    
+    const { imageUrl } = this.state;
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? "loading" : "plus"} />
         <div className="ant-upload-text">Upload Avatar</div>
       </div>
     );
-    const { imageUrl } = this.state;
+    
     return (
       <div style={{paddingTop:"14px"}}>
         <Form>
