@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
+import history from './history';
 import { Layout, Breadcrumb } from "antd";
 import Dashboard from "./components/ContentAD/Dashboard";
 import UserTable from "./components/ContentAD/Use_Managerment/UserTable";
@@ -25,7 +26,7 @@ export default class App extends Component {
   render() {
     let {collapsed} = this.state
     return (
-      <Router>
+      <Router history={history}>
         <Layout style={{ minHeight: "100vh" }}>
             <SiderAD collapsed={collapsed} />
             <Layout>
@@ -43,7 +44,7 @@ export default class App extends Component {
                     <Route path="/dashboard">
                       <Dashboard />
                     </Route>
-                    <Route exact path="/managerment/user/page=1">
+                    <Route exact path="/managerment/user">
                       <UserTable />
                     </Route>
                     <Route path="/managerment/user/update">

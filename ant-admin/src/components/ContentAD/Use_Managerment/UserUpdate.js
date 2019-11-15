@@ -39,9 +39,7 @@ function beforeUpload(file) {
 
 export default class UserUpdate extends Component {
   state = {
-    userDetail: {
-      birthday: ""
-    },
+    userDetail: {},
     loading: false
   };
   
@@ -62,7 +60,6 @@ export default class UserUpdate extends Component {
     const url = window.location
     const urlString = new URL(url)
     const id = urlString.searchParams.get('id')
-
     return id
   }
 
@@ -125,7 +122,6 @@ export default class UserUpdate extends Component {
 
   render() {
     let { userDetail } = this.state;
-    
     const { imageUrl } = this.state;
     const uploadButton = (
       <div>

@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
 
 import { Table, Divider, Popconfirm, Pagination, Icon, Popover } from "antd";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import axios from "axios";
-import './UserUpdate.css'
+import "./UserUpdate.css";
 
 const editUser = (
   <div>
@@ -17,7 +17,7 @@ const deleteUser = (
   </div>
 );
 
-export default class UserTable extends PureComponent {
+class UserTable extends PureComponent {
   constructor(props) {
     super(props);
     this.columns = [
@@ -112,12 +112,13 @@ export default class UserTable extends PureComponent {
 
     this.state = {
       user: [],
-      newData: []
+      newData: [],
+      currentPage: 1
     };
   }
 
   componentDidMount() {
-    this.getData();
+    this.getPageUrl()
   }
 
   formatData = () => {
@@ -144,22 +145,14 @@ export default class UserTable extends PureComponent {
   handleDelete = key => {
     const newData = [...this.state.newData];
     this.setState({ newData: newData.filter(item => item.key !== key) });
-    axios.delete(`https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${key}`, newData )
-    .then(res => {
-      console.log(res.data);
-    })
-  };
-
-  handleSave = row => {
-    const newData = [...this.state.newData];
-    const index = newData.findIndex(item => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row
-    });
-    this.setState({ newData });
-    
+    axios
+      .delete(
+        `https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${key}`,
+        newData
+      )
+      .then(res => {
+        console.log(res.data);
+      });
   };
 
   getData(page = 1) {
@@ -176,10 +169,24 @@ export default class UserTable extends PureComponent {
       });
   }
 
-  handlePagination = (page, pageSize) => {
+  handlePagination = (page, pageSize) => {    
+    this.setState({
+      currentPage : Number(page)
+    })
     this.getData(page);
+    this.props.history.push(`/managerment/user?page=${page}`);
   };
 
+  getPageUrl = () => {
+    const url = window.location;
+    const urlString = new URL(url);
+    const page = urlString.searchParams.get("page");
+    this.handlePagination(page)
+    this.setState({
+      currentPage: Number(page)
+    })
+  }
+  
   render() {
     let { newData } = this.state;
     const columns = this.columns.map(col => {
@@ -192,16 +199,11 @@ export default class UserTable extends PureComponent {
           record,
           dataIndex: col.dataIndex,
           title: col.title,
-          handleSave: this.handleSave
         })
       };
     });
-
-    console.log(newData)
-    
     return (
       <div>
-        
         <Table
           columns={columns}
           dataSource={newData}
@@ -211,6 +213,7 @@ export default class UserTable extends PureComponent {
         <Pagination
           style={{ textAlign: "right", paddingTop: "20px" }}
           defaultCurrent={1}
+          current={this.state.currentPage}
           total={30}
           onChange={this.handlePagination}
         />
@@ -218,3 +221,5 @@ export default class UserTable extends PureComponent {
     );
   }
 }
+
+export default withRouter(UserTable);
