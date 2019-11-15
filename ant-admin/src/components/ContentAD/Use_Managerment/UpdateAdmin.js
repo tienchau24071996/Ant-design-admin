@@ -2,31 +2,98 @@ import React, { Component } from "react";
 import { Form, Row, Col, Input, Select, DatePicker, Button } from "antd";
 import axios from "axios";
 import moment from "moment";
+import validator from "validator";
 
 const dateFormat = ["MM/DD/YYYY", "MM/DD/YY"];
 const { Option } = Select;
 
 export default class UpdateAdmin extends Component {
   state = {
-    user: {}
+    user: {
+      dataSource: {
+        first_name: "",
+        last_name: "",
+        Country: "",
+        Email: "",
+        Company: "",
+        gevmeEmail: "nhanle434@gmail.com",
+        Gender: "",
+        Birthday: null,
+        prenium: "Yes"
+      }
+    },
+    emailError: false
   };
 
   componentDidMount() {
+    const url_string = window.location.href;
+    const url = new URL(url_string);
+    const id = url.searchParams.get("id");
     axios
-      .get(`http://5dcb85f734d54a0014315051.mockapi.io/api/admin/1`)
+      .get(`http://5dcb85f734d54a0014315051.mockapi.io/api/admin/${id}`)
       .then(res => {
         const user = res.data;
-        console.log(user);
         this.setState({
           user
         });
       });
   }
 
-  render() {
-    let { user } = this.state;
-    console.log(user.Birthday);
+  handleChangeDate = (moment, dateString) => {
+    this.setState(prevState => ({
+      user: {
+        ...prevState.user,
+        Birthday: dateString
+      }
+    }));
+  };
 
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      user: {
+        ...prevState.user,
+        [name]: value
+      }
+    }));
+  };
+  handleChangeSelect = event => {
+    this.setState(prevState => ({
+      user: {
+        ...prevState.user,
+        Gender: event
+      }
+    }));
+  };
+  handleErrorEmail = value => {
+    this.setState({
+      emailError: !validator.isEmail(value)
+    });
+  };
+  handleChangeEmail = event => {
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      user: {
+        ...prevState.user,
+        [name]: value
+      }
+    }));
+    this.handleErrorEmail(event.target.value);
+  };
+  handleClick = () => {
+    const url_string = window.location.href;
+    const url = new URL(url_string);
+    const id = url.searchParams.get("id");
+    let { user } = this.state;
+    axios
+      .put(`http://5dcb85f734d54a0014315051.mockapi.io/api/admin/${id}`, user)
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      });
+  };
+  render() {
+    let { user, emailError } = this.state;
     return (
       <div>
         <Form>
@@ -77,9 +144,10 @@ export default class UpdateAdmin extends Component {
                       format={dateFormat}
                       onChange={this.handleChangeDate}
                       style={{ width: "100%" }}
-                      defaultValue={moment('2015/01/01', dateFormat)} 
-                      />
-
+                      value={
+                        user.Birthday ? moment(user.Birthday, dateFormat) : null
+                      }
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -87,16 +155,19 @@ export default class UpdateAdmin extends Component {
               <Form.Item>
                 <span>Email</span>
                 <Input
-                  name="email"
-                  onChange={this.handleChange}
+                  name="Email"
+                  onChange={this.handleChangeEmail}
                   value={user.Email}
                 />
+                {emailError ? (
+                  <div style={{ color: "red" }}>Hãy Nhập Mail Hợp Lệ</div>
+                ) : null}
               </Form.Item>
 
               <Form.Item>
                 <span>Country</span>
                 <Input
-                  name="country"
+                  name="Country"
                   onChange={this.handleChange}
                   value={user.Country}
                 />
@@ -113,7 +184,11 @@ export default class UpdateAdmin extends Component {
               </Form.Item>
 
               <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={this.handleClick}
+                >
                   Update
                 </Button>
               </Form.Item>

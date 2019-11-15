@@ -2,59 +2,70 @@ import React, { Component } from "react";
 import { Form, Input, Row, Col, Button, Select, DatePicker } from "antd";
 import { NavLink } from "react-router-dom";
 import validator from "validator";
+import axios from "axios";
 
 const dateFormatList = ["MM/DD/YYYY", "MM/DD/YY"];
 
 const { Option } = Select;
 export default class AddAdmin extends Component {
   state = {
-    emailError: false,
     dataSource: {
-    first_name: "",
-    last_name: "",
-    country: "",
-    email: "",
-    company: "",
-    gevmeEmail: "nhanle434@gmail.com",
-    gender: "",
-    date: null,
-    prenium:"Yes"
-    },
-    
+      emailError: false,
+      dataSource: {
+        first_name: "",
+        last_name: "",
+        Country: "",
+        Email: "",
+        Company: "",
+        GevmeEmail: "nhanle434@gmail.com",
+        Gender: "",
+        Birthday: null,
+        Prenium: "Yes"
+      }
+    }
   };
   handleAdd = () => {
-    console.log(this.state.dataSource);
-
-
+    let { dataSource } = this.state;
+    axios
+      .post(`http://5dcb85f734d54a0014315051.mockapi.io/api/admin/`, dataSource)
+      .then(res => {});
   };
   handleGetDate = (moment, dateString) => {
-    this.setState( prevState => ({
-      dataSource:{
+    this.setState(prevState => ({
+      dataSource: {
         ...prevState.dataSource,
-      date: dateString
+        Birthday: dateString
       }
     }));
   };
 
   handleSelect = event => {
-    this.setState( prevState =>({
-      dataSource:{
+    this.setState(prevState => ({
+      dataSource: {
         ...prevState.dataSource,
-      gender: event
+        Gender: event
       }
     }));
   };
 
   handleGetValue = event => {
-    const { name, value } = event.target
-    this.setState( prevState => ({
-      dataSource : {
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      dataSource: {
         ...prevState.dataSource,
         [name]: value
       }
-     
     }));
+  };
 
+  handleChangeEmail = event => {
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      dataSource: {
+        ...prevState.dataSource,
+        [name]: value
+      }
+    }));
     this.handleErrorEmail(event.target.value);
   };
 
@@ -89,8 +100,8 @@ export default class AddAdmin extends Component {
               <Form.Item label="Gender">
                 <Select
                   onChange={this.handleSelect}
-                  value={this.state.dataSource.gender}
-                  name="gender"
+                  value={this.state.dataSource.Gender}
+                  name="Gender"
                 >
                   <Option value="Female">Female</Option>
                   <Option value="Male">Male</Option>
@@ -99,15 +110,15 @@ export default class AddAdmin extends Component {
               <Form.Item label="Country">
                 <Input
                   onChange={this.handleGetValue}
-                  value={this.state.dataSource.country}
-                  name="country"
+                  value={this.state.dataSource.Country}
+                  name="Country"
                 />
               </Form.Item>
               <Form.Item label="Email">
                 <Input
-                  onChange={this.handleGetValue}
-                  value={this.state.dataSource.email}
-                  name="email"
+                  onChange={this.handleChangeEmail}
+                  value={this.state.dataSource.Email}
+                  name="Email"
                 />
                 {emailError ? (
                   <div style={{ color: "red" }}>Hãy Nhập Mail Hợp Lệ</div>
@@ -123,8 +134,8 @@ export default class AddAdmin extends Component {
               <Form.Item label="Company">
                 <Input
                   onChange={this.handleGetValue}
-                  value={this.state.dataSource.company}
-                  name="company"
+                  value={this.state.dataSource.Company}
+                  name="Company"
                 />
               </Form.Item>
               <Form.Item label="GevmeEmail">
@@ -132,17 +143,16 @@ export default class AddAdmin extends Component {
                   disabled
                   onChange={this.handleGetValue}
                   value="nhanle434@gmail.com"
-                  name="gevmeEmail"
+                  name="GevmeEmail"
                 />
               </Form.Item>
               <Form.Item label="Prenium">
                 <Input
-                 onChange={this.handleGetValue}
-                value="Yes"
-                name="prenium"
-                disabled 
+                  onChange={this.handleGetValue}
+                  value="Yes"
+                  name="Prenium"
+                  disabled
                 />
-                
               </Form.Item>
             </Col>
           </Row>
