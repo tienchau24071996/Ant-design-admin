@@ -85,7 +85,6 @@ export default class UserTable extends Component {
 
   formatData = () => {
     let { user } = this.state;
-    console.log(user);
     let newData = [];
     newData = user.map(item => ({
       key: item.id,
@@ -98,7 +97,6 @@ export default class UserTable extends Component {
       gevmeEmail: item.gevmeEmail,
       isPrenium: item.isPrenium ? "Yes" : "No"
     }));
-    console.log(newData);
     this.setState({
       newData: newData
     });

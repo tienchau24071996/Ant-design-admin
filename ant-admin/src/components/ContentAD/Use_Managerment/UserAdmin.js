@@ -8,10 +8,11 @@ import {
   Popover,
   Popconfirm
 } from "antd";
-import { NavLink } from "react-router-dom";
+import { NavLink,withRouter } from "react-router-dom";
 import axios from "axios";
 
-export default class UserAdmin extends Component {
+
+class UserAdmin extends Component {
   constructor(props) {
     super(props);
     this.columns = [
@@ -77,7 +78,7 @@ export default class UserAdmin extends Component {
               title="Sure to delete?"
               onConfirm={() => this.handleDelete(record.key)}
             >
-              <a>
+              <a href="/">
                 <Icon type="delete" />
               </a>
             </Popconfirm>
@@ -88,11 +89,12 @@ export default class UserAdmin extends Component {
     this.state = {
       user: [],
       newData: [],
-      key: ""
+      key: "",
+      currentPage: 1
     };
   }
   componentDidMount() {
-    this.getData();
+    this.getURL();
   }
 
   formatData = () => {
@@ -115,8 +117,10 @@ export default class UserAdmin extends Component {
       newData: newData
     });
   };
-  handleChangePage = (page, pageSize) => {
+  handleChangePage = (page = 1 , pageSize) => {
     this.getData(page);
+    this.props.history.push(`/managerment/admin?page=${page}`);
+    this.setState({currentPage:Number(page)})
   };
 
   handleDelete = key => {
@@ -143,9 +147,27 @@ export default class UserAdmin extends Component {
         this.formatData();
       });
   };
+  getURL = () =>{
+    const url = window.location;
+    const urlString = new URL(url);
+    let page = urlString.searchParams.get("page");
+    if (page > 3){
+      page = 3
+    }
+    else if(page < 1){
+      page = 1
+    }
+    else if(typeof page === "string"){
+      page  = 1
+    }
+    this.setState({
+      currentPage: Number(page)
+    })
+    this.handleChangePage(page);
 
+  }
   render() {
-    let { newData } = this.state;
+    let { newData , currentPage } = this.state;
     const columns = this.columns.map(col => {
       if (!col.editable) {
         return col;
@@ -164,7 +186,7 @@ export default class UserAdmin extends Component {
     return (
       <div>
         <Button type="primary" style={{ marginBottom: 16 }}>
-          <NavLink to="/managerment/admin/add">Add a row</NavLink>
+          <NavLink to="/managerment/admin/add">Add admin</NavLink>
         </Button>
         <Table
           columns={columns}
@@ -174,7 +196,8 @@ export default class UserAdmin extends Component {
         />
         <Pagination
           defaultCurrent={1}
-          total={50}
+          current={currentPage}
+          total={30}
           onChange={this.handleChangePage}
           style={{ textAlign: "end", paddingTop: "5px" }}
         />
@@ -182,3 +205,4 @@ export default class UserAdmin extends Component {
     );
   }
 }
+export default withRouter(UserAdmin);

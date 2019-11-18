@@ -11,7 +11,8 @@ import SiderAD from "./components/SiderAD/SiderAD";
 import FooterAd from "./components/Footer/FooterAd";
 import UserAdmin from "./components/ContentAD/Use_Managerment/UserAdmin";
 import AddAdmin from "./components/ContentAD/Use_Managerment/AddAdmin";
-import UpDateAdmin from "./components/ContentAD/Use_Managerment/UpdateAdmin"
+import UpDateAdmin from "./components/ContentAD/Use_Managerment/UpdateAdmin";
+import UpdateFinish from "./components/ContentAD/Use_Managerment/UpdateFinish"
 const { Content } = Layout;
 
 export default class App extends Component {
@@ -57,6 +58,9 @@ export default class App extends Component {
                   </Route>
                   <Route path="/managerment/admin/update">
                     <UpDateAdmin/>
+                  </Route>
+                  <Route path="/managerment/admin/updatefinish">
+                    <UpdateFinish/>
                   </Route>
                   <Route path="/user">
                     <UserProfile />

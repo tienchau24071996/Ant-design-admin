@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Form, Row, Col, Input, Select, DatePicker, Button } from "antd";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import validator from "validator";
@@ -22,7 +23,8 @@ export default class UpdateAdmin extends Component {
         prenium: "Yes"
       }
     },
-    emailError: false
+    emailError: false,
+    dateError:false
   };
 
   componentDidMount() {
@@ -40,6 +42,7 @@ export default class UpdateAdmin extends Component {
   }
 
   handleChangeDate = (moment, dateString) => {
+    console.log(moment)
     this.setState(prevState => ({
       user: {
         ...prevState.user,
@@ -97,9 +100,9 @@ export default class UpdateAdmin extends Component {
     return (
       <div>
         <Form>
-          <Row>
-            <Col>
-              <Row>
+          <Row style={{ height: "100%" }}>
+            <Col xs={24} sm={24} md={6} style={{ width: "100%" }}>
+              <Row style={{ height: "100%" }}>
                 <Col>
                   <Form.Item>
                     <span>First name</span>
@@ -133,6 +136,7 @@ export default class UpdateAdmin extends Component {
                     >
                       <Option value="Male">Male</Option>
                       <Option value="Female">Female</Option>
+                      <Option value="Custom">Custom</Option>
                     </Select>
                   </Form.Item>
                 </Col>
@@ -184,13 +188,15 @@ export default class UpdateAdmin extends Component {
               </Form.Item>
 
               <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={this.handleClick}
-                >
-                  Update
-                </Button>
+                <div style={{ textAlign: "right" }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this.handleClick}
+                  >
+                    <NavLink to="/managerment/admin/updatefinish">Update</NavLink>
+                  </Button>
+                </div>
               </Form.Item>
             </Col>
           </Row>

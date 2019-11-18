@@ -42,7 +42,7 @@ export default class SiderAD extends Component {
               </NavLink>
             </Menu.Item>
             <Menu.Item key="3">
-              <NavLink to="/managerment/admin" >
+              <NavLink to="/managerment/admin?page=1" >
                 Admin
               </NavLink>
             </Menu.Item>

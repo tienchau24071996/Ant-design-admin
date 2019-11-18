@@ -82,7 +82,7 @@ export default class AddAdmin extends Component {
         <h3>Basic Setting</h3>
         <Form>
           <Row>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={6} style={{width:"100%"}}>
               <Form.Item label="First name">
                 <Input
                   onChange={this.handleGetValue}
@@ -156,13 +156,15 @@ export default class AddAdmin extends Component {
               </Form.Item>
             </Col>
           </Row>
+          <div style={{textAlign:"right"}}>
           <Button
             onClick={this.handleAdd}
             type="primary"
             style={{ marginBottom: 16 }}
           >
-            <NavLink to="/managerment/admin">Add</NavLink>
+            <NavLink to="/managerment/admin/updatefinish">Add</NavLink>
           </Button>
+          </div>
         </Form>
       </div>
     );
