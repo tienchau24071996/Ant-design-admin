@@ -2,8 +2,6 @@ import React, { PureComponent } from "react";
 
 import { Table, Divider, Popconfirm, Pagination, Icon, Popover } from "antd";
 import { NavLink, withRouter } from "react-router-dom";
-import axios from "axios";
-import "./UserUpdate.css";
 
 const editUser = (
   <div>
@@ -92,7 +90,7 @@ class UserTable extends PureComponent {
                 </Popover>
               </NavLink>
               <Divider type="vertical" />
-              {this.state.newData.length >= 1 ? (
+              {this.props.user.length >= 1 ? (
                 <Popconfirm
                   title="Sure to delete?"
                   onConfirm={() => this.handleDelete(record.key)}
@@ -109,71 +107,27 @@ class UserTable extends PureComponent {
         }
       }
     ];
-
-    this.state = {
-      user: [],
-      newData: [],
-      currentPage: 1
-    };
   }
 
+  state = {
+    currentPage: 1
+  }
+  
   componentDidMount() {
     this.getPageUrl()
   }
 
-  formatData = () => {
-    let { user } = this.state;
-    let newData = [];
-    newData = user.map(item => ({
-      key: item.id,
-      id: item.id,
-      firstName: item.first_name,
-      lastName: item.last_name,
-      gender: item.gender,
-      country: item.country,
-      email: item.email,
-      birthday: item.birthday,
-      companyName: item.companyName,
-      gevmeEmail: item.gevmeEmail,
-      isPrenium: item.isPrenium ? "Yes" : "No"
-    }));
-    this.setState({
-      newData: newData
-    });
+  handleDelete = async (key) => {
+    await this.props.onDeleteUser(key)
+    await this.props.onGetListUser(this.state.currentPage)
+    await this.props.history.push(`/managerment/user?page=${this.state.currentPage}`);
   };
-
-  handleDelete = key => {
-    const newData = [...this.state.newData];
-    this.setState({ newData: newData.filter(item => item.key !== key) });
-    axios
-      .delete(
-        `https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${key}`,
-        newData
-      )
-      .then(res => {
-        console.log(res.data);
-      });
-  };
-
-  getData(page = 1) {
-    axios
-      .get(
-        `https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient?p=${page}&l=10`
-      )
-      .then(res => {
-        const user = res.data;
-        this.setState({ user });
-      })
-      .then(() => {
-        this.formatData();
-      });
-  }
 
   handlePagination = (page, pageSize) => {    
     this.setState({
       currentPage : Number(page)
     })
-    this.getData(page);
+    this.props.onGetListUser(page)
     this.props.history.push(`/managerment/user?page=${page}`);
   };
 
@@ -181,14 +135,18 @@ class UserTable extends PureComponent {
     const url = window.location;
     const urlString = new URL(url);
     const page = urlString.searchParams.get("page");
-    this.handlePagination(page)
+    let checkPage = page
+    if (page > 3)
+       checkPage = 3
+    else if (page < 1)
+        checkPage = 1
+    this.handlePagination(checkPage)
     this.setState({
-      currentPage: Number(page)
+      currentPage: Number(checkPage)
     })
   }
   
   render() {
-    let { newData } = this.state;
     const columns = this.columns.map(col => {
       if (!col.editable) {
         return col;
@@ -206,7 +164,7 @@ class UserTable extends PureComponent {
       <div>
         <Table
           columns={columns}
-          dataSource={newData}
+          dataSource={this.props.user}
           scroll={{ x: 1600 }}
           pagination={false}
         ></Table>
@@ -222,4 +180,5 @@ class UserTable extends PureComponent {
   }
 }
 
-export default withRouter(UserTable);
+export default withRouter(UserTable)
+

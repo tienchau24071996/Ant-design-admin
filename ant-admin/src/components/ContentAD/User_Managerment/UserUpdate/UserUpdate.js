@@ -121,7 +121,7 @@ export default class UserUpdate extends Component {
   };
 
   render() {
-    let { userDetail } = this.state;
+    const { userDetail } = this.state;
     const { imageUrl } = this.state;
     const uploadButton = (
       <div>

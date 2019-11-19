@@ -16,11 +16,10 @@ export default class SiderAD extends Component {
         collapsed={collapsed}
         className="Sider"
       >
-          
-            <div className="logo">
+            <a className="logo" href="/" >
               <Avatar size={64} src="https://media.licdn.com/dms/image/C510BAQGEoHkIdPtXow/company-logo_400_400/0?e=1580947200&v=beta&t=8ujYl6meTinWVsT02DdvKaYS4QBd5dImav5yEsGfb2Y" />    
               <h2 style={{color:"#fff",marginBottom:0,paddingLeft: "10px"}}>Spirit Labs</h2>
-            </div>
+            </a>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]} >
           <Menu.Item key="1">
               <NavLink to="/dashboard" >
