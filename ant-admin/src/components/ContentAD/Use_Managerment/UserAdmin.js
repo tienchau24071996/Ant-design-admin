@@ -8,9 +8,8 @@ import {
   Popover,
   Popconfirm
 } from "antd";
-import { NavLink,withRouter } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import axios from "axios";
-
 
 class UserAdmin extends Component {
   constructor(props) {
@@ -57,9 +56,9 @@ class UserAdmin extends Component {
         key: "GevmeEmail"
       },
       {
-        title: "Prenium",
-        dataIndex: "Prenium",
-        key: "Prenium"
+        title: "Premium",
+        dataIndex: "Premium",
+        key: "Premium"
       },
       {
         title: "Action",
@@ -76,16 +75,18 @@ class UserAdmin extends Component {
             <Divider type="vertical" />
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => this.handleDelete(record.key)}
+              onCancel={this._onCancel}
+              onConfirm={this.handleDelete(record.key)}
             >
-              <a href="/">
-                <Icon type="delete" />
-              </a>
+              <Popover content="Delete" onClick={this._preventEvent}>
+                  <Icon type="delete" />
+              </Popover>
             </Popconfirm>
           </span>
         )
       }
     ];
+
     this.state = {
       user: [],
       newData: [],
@@ -93,8 +94,13 @@ class UserAdmin extends Component {
       currentPage: 1
     };
   }
+
   componentDidMount() {
     this.getURL();
+  }
+
+  _onCancel = event => {
+    event.stopPropagation()
   }
 
   formatData = () => {
@@ -111,26 +117,32 @@ class UserAdmin extends Component {
       Birthday: item.Birthday,
       Company: item.Company,
       GevmeEmail: item.GevmeEmail,
-      Prenium: item.Prenium ? "Yes" : "No"
+      Premium: item.Premium ? "Yes" : "No"
     }));
     this.setState({
       newData: newData
     });
   };
-  handleChangePage = (page = 1 , pageSize) => {
+
+  handleChangePage = (page = 1, pageSize) => {
     this.getData(page);
     this.props.history.push(`/managerment/admin?page=${page}`);
-    this.setState({currentPage:Number(page)})
+    this.setState({ currentPage: Number(page) });
   };
 
-  handleDelete = key => {
+  _preventEvent = event => {
+    event.stopPropagation()
+  }
+
+  handleDelete = key => event => {
+    event.stopPropagation()
     const newData = [...this.state.newData];
     this.setState({ newData: newData.filter(item => item.key !== key) });
     axios.delete(
       `http://5dcb85f734d54a0014315051.mockapi.io/api/admin/${key}`,
       newData
-    );
-  };
+    )
+  }
 
   getData = (page = 1) => {
     axios
@@ -147,27 +159,30 @@ class UserAdmin extends Component {
         this.formatData();
       });
   };
-  getURL = () =>{
+
+  getURL = () => {
     const url = window.location;
     const urlString = new URL(url);
     let page = urlString.searchParams.get("page");
-    if (page > 3){
-      page = 3
-    }
-    else if(page < 1){
-      page = 1
-    }
-    else if(typeof page === "string"){
-      page  = 1
+    if (page > 3) {
+      page = 3;
+    } else if (page < 1) {
+      page = 1;
+    } else if (typeof page === "string") {
+      page = 1;
     }
     this.setState({
       currentPage: Number(page)
-    })
+    });
     this.handleChangePage(page);
+  };
 
-  }
+  handleRow = (record, index) => {
+    console.log(record.id);
+  };
+
   render() {
-    let { newData , currentPage } = this.state;
+    let { newData, currentPage } = this.state;
     const columns = this.columns.map(col => {
       if (!col.editable) {
         return col;
@@ -193,6 +208,15 @@ class UserAdmin extends Component {
           dataSource={newData}
           scroll={{ x: 1300 }}
           pagination={false}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: () => {
+                this.props.history.push(
+                  `/managerment/admin/update?id=${record.id}`
+                )
+              }
+            };
+          }}
         />
         <Pagination
           defaultCurrent={1}

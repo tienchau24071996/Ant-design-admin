@@ -10,8 +10,8 @@ export default class UpdateFinish extends Component {
           status="success"
           title="Finish"
           extra={[
-            <Button type="primary" key="console" >
-             <NavLink to="/managerment/admin">Go Console</NavLink>
+            <Button type="primary" key="console">
+              <NavLink to="/managerment/admin">Go Console</NavLink>
             </Button>
           ]}
         />

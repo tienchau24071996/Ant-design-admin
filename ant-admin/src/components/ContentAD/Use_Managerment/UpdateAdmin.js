@@ -24,7 +24,7 @@ export default class UpdateAdmin extends Component {
       }
     },
     emailError: false,
-    dateError:false
+    TestBirthday: true
   };
 
   componentDidMount() {
@@ -42,13 +42,38 @@ export default class UpdateAdmin extends Component {
   }
 
   handleChangeDate = (moment, dateString) => {
-    console.log(moment)
+    let { TestBirthday } = this.state;
+    let datenow = new Date();
+    let yearnow = datenow.getFullYear();
+    let monthnow = datenow.getUTCMonth() + 1;
+    let daynow = ("0" + datenow.getDate()).slice(-2);
+    let datenew = moment._d;
+    let yearnew = datenew.getFullYear();
+    let monthnew = datenew.getUTCMonth() + 1;
+    let daynew = ("0" + datenew.getDate()).slice(-2);
     this.setState(prevState => ({
       user: {
         ...prevState.user,
         Birthday: dateString
       }
     }));
+    if (yearnew > yearnow) {
+      this.setState({ TestBirthday: false });
+    } else if (yearnew < yearnow) {
+      this.setState({ TestBirthday: false });
+    } else if ((yearnew = yearnow)) {
+      if (monthnew < monthnow) {
+        this.setState({ TestBirthday: true });
+      } else if (monthnew > monthnow) {
+        this.setState({ TestBirthday: false });
+      } else if ((monthnew = monthnow)) {
+        if (daynew >= daynow) {
+          this.setState({ TestBirthday: false });
+        } else if (datenew < datenow) {
+          this.setState({ TestBirthday: true });
+        }
+      }
+    }
   };
 
   handleChange = event => {
@@ -96,9 +121,12 @@ export default class UpdateAdmin extends Component {
       });
   };
   render() {
-    let { user, emailError } = this.state;
+    let { user, emailError, TestBirthday } = this.state;
     return (
       <div>
+        <Button type="primary" style={{ marginBottom: 16 }}>
+          <NavLink to="/managerment/admin">Back</NavLink>
+        </Button>
         <Form>
           <Row style={{ height: "100%" }}>
             <Col xs={24} sm={24} md={6} style={{ width: "100%" }}>
@@ -152,6 +180,9 @@ export default class UpdateAdmin extends Component {
                         user.Birthday ? moment(user.Birthday, dateFormat) : null
                       }
                     />
+                    {!TestBirthday ? (
+                      <div style={{ color: "red" }}>Bạn chưa được sinh ra</div>
+                    ) : null}
                   </Form.Item>
                 </Col>
               </Row>
@@ -194,7 +225,9 @@ export default class UpdateAdmin extends Component {
                     htmlType="submit"
                     onClick={this.handleClick}
                   >
-                    <NavLink to="/managerment/admin/updatefinish">Update</NavLink>
+                    <NavLink to="/managerment/admin/updatefinish">
+                      Update
+                    </NavLink>
                   </Button>
                 </div>
               </Form.Item>

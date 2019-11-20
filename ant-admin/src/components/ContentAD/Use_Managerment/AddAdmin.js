@@ -10,19 +10,18 @@ const { Option } = Select;
 export default class AddAdmin extends Component {
   state = {
     dataSource: {
-      emailError: false,
-      dataSource: {
-        first_name: "",
-        last_name: "",
-        Country: "",
-        Email: "",
-        Company: "",
-        GevmeEmail: "nhanle434@gmail.com",
-        Gender: "",
-        Birthday: null,
-        Prenium: "Yes"
-      }
-    }
+      first_name: "",
+      last_name: "",
+      Country: "",
+      Email: "",
+      Company: "",
+      GevmeEmail: "nhanle434@gmail.com",
+      Gender: "",
+      Birthday: null,
+      Prenium: "Yes"
+    },
+    TestBirthday: true,
+    emailError: false
   };
   handleAdd = () => {
     let { dataSource } = this.state;
@@ -31,12 +30,39 @@ export default class AddAdmin extends Component {
       .then(res => {});
   };
   handleGetDate = (moment, dateString) => {
+    let { TestBirthday } = this.state;
+    let datenow = new Date();
+    let yearnow = datenow.getFullYear();
+    let monthnow = datenow.getUTCMonth() + 1;
+    let daynow = ("0" + datenow.getDate()).slice(-2);
+    let datenew = moment._d;
+    let yearnew = datenew.getFullYear();
+    let monthnew = datenew.getUTCMonth() + 1;
+    let daynew = ("0" + datenew.getDate()).slice(-2);
     this.setState(prevState => ({
       dataSource: {
         ...prevState.dataSource,
         Birthday: dateString
       }
     }));
+    if (yearnew > yearnow) {
+      this.setState({ TestBirthday: false });
+    } else if (yearnew < yearnow) {
+      this.setState({ TestBirthday: false });
+    } else if ((yearnew = yearnow)) {
+      if (monthnew < monthnow) {
+        this.setState({ TestBirthday: true });
+      } else if (monthnew > monthnow) {
+        this.setState({ TestBirthday: false });
+      } else if ((monthnew = monthnow)) {
+        if (daynew >= daynow) {
+          this.setState({ TestBirthday: false });
+        } else if (datenew < datenow) {
+          this.setState({ TestBirthday: true });
+        }
+      }
+    }
+    console.log(this.state.TestBirthday);
   };
 
   handleSelect = event => {
@@ -76,13 +102,15 @@ export default class AddAdmin extends Component {
   };
 
   render() {
-    let { emailError } = this.state;
+    let { emailError, TestBirthday } = this.state;
     return (
       <div>
-        <h3>Basic Setting</h3>
+        <Button type="primary" style={{ marginBottom: 16 }}>
+          <NavLink to="/managerment/admin">Back</NavLink>
+        </Button>
         <Form>
           <Row>
-            <Col xs={24} sm={24} md={6} style={{width:"100%"}}>
+            <Col xs={24} sm={24} md={6} style={{ width: "100%" }}>
               <Form.Item label="First name">
                 <Input
                   onChange={this.handleGetValue}
@@ -130,6 +158,9 @@ export default class AddAdmin extends Component {
                   format={dateFormatList}
                   style={{ width: "100%" }}
                 />
+                {!TestBirthday ? (
+                  <div style={{ color: "red" }}>Bạn chưa được sinh ra</div>
+                ) : null}
               </Form.Item>
               <Form.Item label="Company">
                 <Input
@@ -156,14 +187,14 @@ export default class AddAdmin extends Component {
               </Form.Item>
             </Col>
           </Row>
-          <div style={{textAlign:"right"}}>
-          <Button
-            onClick={this.handleAdd}
-            type="primary"
-            style={{ marginBottom: 16 }}
-          >
-            <NavLink to="/managerment/admin/updatefinish">Add</NavLink>
-          </Button>
+          <div style={{ textAlign: "right" }}>
+            <Button
+              onClick={this.handleAdd}
+              type="primary"
+              style={{ marginBottom: 16 }}
+            >
+              <NavLink to="/managerment/admin/updatefinish">Add</NavLink>
+            </Button>
           </div>
         </Form>
       </div>
