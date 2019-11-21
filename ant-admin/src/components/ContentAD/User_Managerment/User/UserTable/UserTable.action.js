@@ -1,16 +1,16 @@
 import { UserTableType } from "./UserTable.type";
 import axios from "axios";
 
-const editUserRequest = () => ({
+const getListUserRequest = () => ({
   type: UserTableType.getListUserRequest
 });
 
-const editUserSuccess = response => ({
+const getListUserSuccess = response => ({
   type: UserTableType.getListUserSuccess,
   response
 });
 
-const editUserFailure = error => ({
+const getListUserFailure = error => ({
   type: UserTableType.getListUserFailure,
   error
 });
@@ -18,14 +18,14 @@ const editUserFailure = error => ({
 export const onGetListUser = page => {
   return async dispatch => {
     try {
-      dispatch(editUserRequest());
+      dispatch(getListUserRequest());
       const response = await axios.get(
         `https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient?p=${page}&l=10`
       );
       const data = formatData(response.data);
-      return dispatch(editUserSuccess(data));
+      return dispatch(getListUserSuccess(data));
     } catch (error) {
-      return editUserFailure(error);
+      return getListUserFailure(error);
     }
   };
 };

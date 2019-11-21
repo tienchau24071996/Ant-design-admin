@@ -12,9 +12,8 @@ import {
   Icon,
   message
 } from "antd";
-import moment from "moment";
-import axios from "axios";
-import "./UserUpdate.css";
+import moment from "moment"
+import "./UserUpdate.css"
 
 const { Option } = Select;
 const dateFormat = "MM/DD/YYYY";
@@ -39,35 +38,26 @@ function beforeUpload(file) {
 
 export default class UserUpdate extends Component {
   state = {
-    userDetail: {},
-    loading: false
+    loading: false,
+    userUpdate: {}
   };
-  
+
   componentDidMount() {
-    axios
-      .get(`https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${this.getInfoURL()}`)
-      .then(res => {
-        const userDetail = res.data;
-        console.log(userDetail);
-        
-        this.setState({
-          userDetail
-        });
-      });
+    this.handleUser();
   }
 
-  getInfoURL() {
-    const url = window.location
-    const urlString = new URL(url)
-    const id = urlString.searchParams.get('id')
-    return id
-  }
+  handleUser = async () => {
+    await this.props.onGetUser();
+    this.setState({
+      userUpdate: this.props.userDetail
+    });
+  };
 
   handleChange = event => {
     const { name, value } = event.target;
     this.setState(prevState => ({
-      userDetail: {
-        ...prevState.userDetail,
+      userUpdate: {
+        ...prevState.userUpdate,
         [name]: value
       }
     }));
@@ -75,8 +65,8 @@ export default class UserUpdate extends Component {
 
   handleChangeSelect = event => {
     this.setState(prevState => ({
-      userDetail: {
-        ...prevState.userDetail,
+      userUpdate: {
+        ...prevState.userUpdate,
         gender: event
       }
     }));
@@ -84,25 +74,30 @@ export default class UserUpdate extends Component {
 
   handleChangeDate = (event, t) => {
     this.setState(prevState => ({
-      userDetail: {
-        ...prevState.userDetail,
+      userUpdate: {
+        ...prevState.userUpdate,
         birthday: t
       }
     }));
   };
 
-  _onSubmit = type => ()  => {
-    console.log(this.state.userDetail);
-    notification[type]({
-      message: "Update successful",
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification."
-    });
-    let {userDetail} = this.state
-    axios.put(`https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${this.getInfoURL()}`, userDetail)
-      .then(res => {
-        console.log(res.data);
-      })
+  _onSubmit = type => () => {
+    if (!this.props.isError) {
+      notification[type]({
+        message: "Update successful",
+        description:
+          "This is the content of the notification. This is the content of the notification. This is the content of the notification."
+      });
+    } else {
+      notification[type]({
+        message: "Update Fail",
+        description: "Update fail"
+      });
+    }
+    let { userUpdate } = this.state;
+    this.props.onUpdateUser(userUpdate);
+    console.log(userUpdate);
+    
   };
 
   handleChangeUpload = info => {
@@ -121,17 +116,16 @@ export default class UserUpdate extends Component {
   };
 
   render() {
-    const { userDetail } = this.state;
-    const { imageUrl } = this.state;
+    const { imageUrl, userUpdate } = this.state;
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? "loading" : "plus"} />
         <div className="ant-upload-text">Upload Avatar</div>
       </div>
     );
-    
+
     return (
-      <div style={{paddingTop:"14px"}}>
+      <div style={{ paddingTop: "14px" }}>
         <Form>
           <Row>
             <Col xs={24} sm={24} md={6}>
@@ -165,7 +159,7 @@ export default class UserUpdate extends Component {
                     <span>First name</span>
                     <Input
                       name="first_name"
-                      value={userDetail.first_name}
+                      value={userUpdate.first_name}
                       onChange={this.handleChange}
                     />
                   </Form.Item>
@@ -175,7 +169,7 @@ export default class UserUpdate extends Component {
                     <span>Last name</span>
                     <Input
                       name="last_name"
-                      value={userDetail.last_name}
+                      value={userUpdate.last_name}
                       onChange={this.handleChange}
                     />
                   </Form.Item>
@@ -189,7 +183,7 @@ export default class UserUpdate extends Component {
                     <Select
                       name="gender"
                       onChange={this.handleChangeSelect}
-                      value={userDetail.gender}
+                      value={userUpdate.gender}
                     >
                       <Option value="Male">Male</Option>
                       <Option value="Female">Female</Option>
@@ -203,9 +197,9 @@ export default class UserUpdate extends Component {
                     <DatePicker
                       name="date"
                       value={
-                        !userDetail.birthday
+                        !userUpdate.birthday
                           ? null
-                          : moment(userDetail.birthday, dateFormat)
+                          : moment(userUpdate.birthday, dateFormat)
                       }
                       format={dateFormat}
                       onChange={this.handleChangeDate}
@@ -220,7 +214,7 @@ export default class UserUpdate extends Component {
                 <Input
                   name="email"
                   onChange={this.handleChange}
-                  value={userDetail.email}
+                  value={userUpdate.email}
                 />
               </Form.Item>
 
@@ -229,25 +223,29 @@ export default class UserUpdate extends Component {
                 <Input
                   name="country"
                   onChange={this.handleChange}
-                  value={userDetail.country}
+                  value={userUpdate.country}
                 />
               </Form.Item>
 
               <Form.Item>
-                <span>gevme Email</span>
-                <Input value={userDetail.gevmeEmail} disabled />
+                <span>Gev me email</span>
+                <Input value={userUpdate.gevmeEmail} disabled />
               </Form.Item>
 
               <Form.Item>
                 <span>Prenium</span>
-                <Input value={userDetail.prenium ? "Yes" : "No"} disabled />
+                <Input value={userUpdate.prenium ? "Yes" : "No"} disabled />
               </Form.Item>
 
               <Form.Item style={{ textAlign: "right" }}>
                 <Button
                   type="primary"
                   htmlType="submit"
-                  onClick={this._onSubmit("success")}
+                  onClick={this._onSubmit(
+                    !this.props.isLoading && this.props.isError
+                      ? "error"
+                      : "success"
+                  )}
                 >
                   Update
                 </Button>
