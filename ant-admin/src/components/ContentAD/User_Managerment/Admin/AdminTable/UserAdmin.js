@@ -51,16 +51,6 @@ class UserAdmin extends Component {
         key: "Company"
       },
       {
-        title: "GevmeEmail",
-        dataIndex: "GevmeEmail",
-        key: "GevmeEmail"
-      },
-      {
-        title: "Premium",
-        dataIndex: "Premium",
-        key: "Premium"
-      },
-      {
         title: "Action",
         key: "operation",
         fixed: "right",
@@ -79,7 +69,9 @@ class UserAdmin extends Component {
               onConfirm={this.handleDelete(record.key)}
             >
               <Popover content="Delete" onClick={this._preventEvent}>
+                <a href="/">
                   <Icon type="delete" />
+                </a>
               </Popover>
             </Popconfirm>
           </span>
@@ -100,8 +92,8 @@ class UserAdmin extends Component {
   }
 
   _onCancel = event => {
-    event.stopPropagation()
-  }
+    event.stopPropagation();
+  };
 
   formatData = () => {
     let { user } = this.state;
@@ -131,18 +123,18 @@ class UserAdmin extends Component {
   };
 
   _preventEvent = event => {
-    event.stopPropagation()
-  }
+    event.stopPropagation();
+  };
 
   handleDelete = key => event => {
-    event.stopPropagation()
+    event.stopPropagation();
     const newData = [...this.state.newData];
     this.setState({ newData: newData.filter(item => item.key !== key) });
     axios.delete(
       `http://5dcb85f734d54a0014315051.mockapi.io/api/admin/${key}`,
       newData
-    )
-  }
+    );
+  };
 
   getData = (page = 1) => {
     axios
@@ -168,6 +160,10 @@ class UserAdmin extends Component {
       page = 3;
     } else if (page < 1) {
       page = 1;
+    } else if (page === 2) {
+      page = 2;
+    } else if (page === 3) {
+      page = 3;
     } else if (typeof page === "string") {
       page = 1;
     }
@@ -213,7 +209,7 @@ class UserAdmin extends Component {
               onClick: () => {
                 this.props.history.push(
                   `/managerment/admin/update?id=${record.id}`
-                )
+                );
               }
             };
           }}
@@ -229,4 +225,5 @@ class UserAdmin extends Component {
     );
   }
 }
+
 export default withRouter(UserAdmin);

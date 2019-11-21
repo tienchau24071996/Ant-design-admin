@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Row, Col, Input, Select, DatePicker, Button } from "antd";
+import { Form, Row, Col, Input, Select, DatePicker, Button, Alert } from "antd";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
@@ -42,7 +42,6 @@ export default class UpdateAdmin extends Component {
   }
 
   handleChangeDate = (moment, dateString) => {
-    let { TestBirthday } = this.state;
     let datenow = new Date();
     let yearnow = datenow.getFullYear();
     let monthnow = datenow.getUTCMonth() + 1;
@@ -181,7 +180,10 @@ export default class UpdateAdmin extends Component {
                       }
                     />
                     {!TestBirthday ? (
-                      <div style={{ color: "red" }}>Bạn chưa được sinh ra</div>
+                      <Alert
+                        message="Date of birth must be before the current date, please enter again"
+                        type="error"
+                      />
                     ) : null}
                   </Form.Item>
                 </Col>
@@ -195,7 +197,10 @@ export default class UpdateAdmin extends Component {
                   value={user.Email}
                 />
                 {emailError ? (
-                  <div style={{ color: "red" }}>Hãy Nhập Mail Hợp Lệ</div>
+                  <Alert
+                    message="Invalid message, please enter again"
+                    type="error"
+                  />
                 ) : null}
               </Form.Item>
 
@@ -208,16 +213,7 @@ export default class UpdateAdmin extends Component {
                 />
               </Form.Item>
 
-              <Form.Item>
-                <span>gevme Email</span>
-                <Input disabled value={user.GevmeEmail} />
-              </Form.Item>
-
-              <Form.Item>
-                <span>Prenium</span>
-                <Input disabled value={user.Prenium} />
-              </Form.Item>
-
+            
               <Form.Item>
                 <div style={{ textAlign: "right" }}>
                   <Button

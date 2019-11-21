@@ -4,15 +4,14 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Layout, Breadcrumb } from "antd";
 import Dashboard from "./components/ContentAD/Dashboard";
-import UserTable from "./components/ContentAD/Use_Managerment/UserTable";
-import UserProfile from "./components/ContentAD/UserProfile";
+import UserTable from "./components/ContentAD/User_Managerment/UserTable";
 import HeaderMenu from "./components/HeaderMenu/HeaderMenu";
 import SiderAD from "./components/SiderAD/SiderAD";
 import FooterAd from "./components/Footer/FooterAd";
-import UserAdmin from "./components/ContentAD/Use_Managerment/UserAdmin";
-import AddAdmin from "./components/ContentAD/Use_Managerment/AddAdmin";
-import UpDateAdmin from "./components/ContentAD/Use_Managerment/UpdateAdmin";
-import UpdateFinish from "./components/ContentAD/Use_Managerment/UpdateFinish"
+import UserAdmin from "./components/ContentAD/User_Managerment/Admin/AdminTable/UserAdmin";
+import AddAdmin from "./components/ContentAD/User_Managerment/Admin/AddAdmin/AddAdmin";
+import UpDateAdmin from "./components/ContentAD/User_Managerment/Admin/UpdateAdmin/UpdateAdmin";
+import UpdateFinish from "./components/ContentAD/User_Managerment/Admin/UpdateFinish";
 const { Content } = Layout;
 
 export default class App extends Component {
@@ -57,13 +56,10 @@ export default class App extends Component {
                     <AddAdmin />
                   </Route>
                   <Route path="/managerment/admin/update">
-                    <UpDateAdmin/>
+                    <UpDateAdmin />
                   </Route>
                   <Route path="/managerment/admin/updatefinish">
-                    <UpdateFinish/>
-                  </Route>
-                  <Route path="/user">
-                    <UserProfile />
+                    <UpdateFinish />
                   </Route>
                 </Switch>
               </div>

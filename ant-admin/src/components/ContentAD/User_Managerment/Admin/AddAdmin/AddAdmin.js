@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Row, Col, Button, Select, DatePicker } from "antd";
+import { Form, Input, Row, Col, Button, Select, DatePicker, Alert, Icon } from "antd";
 import { NavLink } from "react-router-dom";
 import validator from "validator";
 import axios from "axios";
@@ -7,6 +7,8 @@ import axios from "axios";
 const dateFormatList = ["MM/DD/YYYY", "MM/DD/YY"];
 
 const { Option } = Select;
+const ButtonGroup = Button.Group;
+
 export default class AddAdmin extends Component {
   state = {
     dataSource: {
@@ -30,7 +32,6 @@ export default class AddAdmin extends Component {
       .then(res => {});
   };
   handleGetDate = (moment, dateString) => {
-    let { TestBirthday } = this.state;
     let datenow = new Date();
     let yearnow = datenow.getFullYear();
     let monthnow = datenow.getUTCMonth() + 1;
@@ -105,9 +106,15 @@ export default class AddAdmin extends Component {
     let { emailError, TestBirthday } = this.state;
     return (
       <div>
-        <Button type="primary" style={{ marginBottom: 16 }}>
-          <NavLink to="/managerment/admin">Back</NavLink>
-        </Button>
+        <ButtonGroup>
+          <NavLink to="/managerment/admin">
+            <Button type="primary">
+              <Icon type="left" />
+              back
+            </Button>
+          </NavLink>
+        </ButtonGroup>
+
         <Form>
           <Row>
             <Col xs={24} sm={24} md={6} style={{ width: "100%" }}>
@@ -149,7 +156,10 @@ export default class AddAdmin extends Component {
                   name="Email"
                 />
                 {emailError ? (
-                  <div style={{ color: "red" }}>Hãy Nhập Mail Hợp Lệ</div>
+                  <Alert
+                    message="Invalid message, please enter again"
+                    type="error"
+                  />
                 ) : null}
               </Form.Item>
               <Form.Item label="Birthday">
@@ -159,7 +169,10 @@ export default class AddAdmin extends Component {
                   style={{ width: "100%" }}
                 />
                 {!TestBirthday ? (
-                  <div style={{ color: "red" }}>Bạn chưa được sinh ra</div>
+                  <Alert
+                    message="Date of birth must be before the current date, please enter again"
+                    type="error"
+                  />
                 ) : null}
               </Form.Item>
               <Form.Item label="Company">
@@ -167,22 +180,6 @@ export default class AddAdmin extends Component {
                   onChange={this.handleGetValue}
                   value={this.state.dataSource.Company}
                   name="Company"
-                />
-              </Form.Item>
-              <Form.Item label="GevmeEmail">
-                <Input
-                  disabled
-                  onChange={this.handleGetValue}
-                  value="nhanle434@gmail.com"
-                  name="GevmeEmail"
-                />
-              </Form.Item>
-              <Form.Item label="Prenium">
-                <Input
-                  onChange={this.handleGetValue}
-                  value="Yes"
-                  name="Prenium"
-                  disabled
                 />
               </Form.Item>
             </Col>
