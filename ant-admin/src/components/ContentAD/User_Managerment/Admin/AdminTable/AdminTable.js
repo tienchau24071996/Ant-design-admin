@@ -78,8 +78,6 @@ class UserAdmin extends Component {
     ];
 
     this.state = {
-      user: [],
-      newData: [],
       key: "",
       currentPage: 1
     };
@@ -93,31 +91,11 @@ class UserAdmin extends Component {
     event.stopPropagation();
   };
 
-  formatData = () => {
-    let { user } = this.state;
-    let newData = [];
-    newData = user.map(item => ({
-      id: item.id,
-      key: item.id,
-      first_name: item.first_name,
-      last_name: item.last_name,
-      Gender: item.Gender,
-      Country: item.Country,
-      Email: item.Email,
-      Birthday: item.Birthday,
-      Company: item.Company,
-      GevmeEmail: item.GevmeEmail,
-      Premium: item.Premium ? "Yes" : "No"
-    }));
-    this.setState({
-      newData: newData
-    });
-  };
-
   handleChangePage = (page = 1, pageSize) => {
-    this.getData(page);
-    this.props.history.push(`/managerment/admin?page=${page}`);
     this.setState({ currentPage: Number(page) });
+    this.props.onGetListAdmin(page)
+    this.props.history.push(`/managerment/admin?page=${page}`);
+    
   };
 
   _preventEvent = event => {
@@ -132,22 +110,6 @@ class UserAdmin extends Component {
       `http://5dcb85f734d54a0014315051.mockapi.io/api/admin/${key}`,
       newData
     );
-  };
-
-  getData = (page = 1) => {
-    axios
-      .get(
-        `http://5dcb85f734d54a0014315051.mockapi.io/api/admin?page=${page}&limit=10`
-      )
-      .then(res => {
-        const user = res.data;
-        this.setState({
-          user
-        });
-      })
-      .then(() => {
-        this.formatData();
-      });
   };
 
   getURL = () => {
@@ -176,7 +138,7 @@ class UserAdmin extends Component {
   };
 
   render() {
-    let { newData, currentPage } = this.state;
+    let { currentPage } = this.state;
     const columns = this.columns.map(col => {
       if (!col.editable) {
         return col;
@@ -199,7 +161,7 @@ class UserAdmin extends Component {
         </Button>
         <Table
           columns={columns}
-          dataSource={newData}
+          dataSource={this.props.dataAdmin}
           scroll={{ x: 1300 }}
           pagination={false}
           onRow={(record, rowIndex) => {

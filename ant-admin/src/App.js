@@ -9,7 +9,7 @@ import UserUpdate from "./components/ContentAD/User_Managerment/User/UserUpdate/
 import HeaderMenu from "./components/HeaderMenu/HeaderMenu";
 import SiderAD from "./components/SiderAD/SiderAD";
 import FooterAd from "./components/Footer/FooterAd";
-import AdminTable from "./components/ContentAD/User_Managerment/Admin/AdminTable/AdminTable";
+import AdminTable from "./components/ContentAD/User_Managerment/Admin/AdminTable/AdminTableContainer";
 import AdminAdd from "./components/ContentAD/User_Managerment/Admin/AdminAdd/AdminAdd";
 import AdminUpdate from "./components/ContentAD/User_Managerment/Admin/AdminUpdate/AdminUpdate";
 import UpdateFinish from "./components/ContentAD/User_Managerment/Admin/UpdateFinish";
