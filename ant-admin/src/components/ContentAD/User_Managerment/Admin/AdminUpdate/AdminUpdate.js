@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Row, Col, Input, Select, DatePicker, Button, Alert } from "antd";
+import { Form, Row, Col, Input, Select, DatePicker, Button, Alert,Icon } from "antd";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
@@ -7,6 +7,7 @@ import validator from "validator";
 
 const dateFormat = ["MM/DD/YYYY", "MM/DD/YY"];
 const { Option } = Select;
+const ButtonGroup = Button.Group;
 
 export default class UpdateAdmin extends Component {
   state = {
@@ -123,9 +124,14 @@ export default class UpdateAdmin extends Component {
     let { user, emailError, TestBirthday } = this.state;
     return (
       <div>
-        <Button type="primary" style={{ marginBottom: 16 }}>
-          <NavLink to="/managerment/admin">Back</NavLink>
-        </Button>
+        <ButtonGroup style={{ marginBottom: 16 }}>
+          <NavLink to="/managerment/admin">
+            <Button type="primary">
+              <Icon type="left" />
+              <span style={{fontSize:"16px"}}>Back</span>
+            </Button>
+          </NavLink>
+        </ButtonGroup>
         <Form>
           <Row style={{ height: "100%" }}>
             <Col xs={24} sm={24} md={6} style={{ width: "100%" }}>
@@ -213,7 +219,6 @@ export default class UpdateAdmin extends Component {
                 />
               </Form.Item>
 
-            
               <Form.Item>
                 <div style={{ textAlign: "right" }}>
                   <Button

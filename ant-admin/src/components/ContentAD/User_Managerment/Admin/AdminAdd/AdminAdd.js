@@ -106,11 +106,11 @@ export default class AddAdmin extends Component {
     let { emailError, TestBirthday } = this.state;
     return (
       <div>
-        <ButtonGroup>
+        <ButtonGroup style={{ marginBottom: 16 }}>
           <NavLink to="/managerment/admin">
             <Button type="primary">
               <Icon type="left" />
-              back
+              <span style={{fontSize:"16px"}}>Back</span>
             </Button>
           </NavLink>
         </ButtonGroup>

@@ -8,9 +8,9 @@ import UserTable from "./components/ContentAD/User_Managerment/UserTable";
 import HeaderMenu from "./components/HeaderMenu/HeaderMenu";
 import SiderAD from "./components/SiderAD/SiderAD";
 import FooterAd from "./components/Footer/FooterAd";
-import UserAdmin from "./components/ContentAD/User_Managerment/Admin/AdminTable/UserAdmin";
-import AddAdmin from "./components/ContentAD/User_Managerment/Admin/AddAdmin/AddAdmin";
-import UpDateAdmin from "./components/ContentAD/User_Managerment/Admin/UpdateAdmin/UpdateAdmin";
+import AdminTable from "./components/ContentAD/User_Managerment/Admin/AdminTable/AdminTable";
+import AdminAdd from "./components/ContentAD/User_Managerment/Admin/AdminAdd/AdminAdd";
+import AdminUpdate from "./components/ContentAD/User_Managerment/Admin/AdminUpdate/AdminUpdate";
 import UpdateFinish from "./components/ContentAD/User_Managerment/Admin/UpdateFinish";
 const { Content } = Layout;
 
@@ -50,13 +50,13 @@ export default class App extends Component {
                     <UserTable />
                   </Route>
                   <Route exact path="/managerment/admin">
-                    <UserAdmin />
+                    <AdminTable />
                   </Route>
                   <Route path="/managerment/admin/add">
-                    <AddAdmin />
+                    <AdminAdd />
                   </Route>
                   <Route path="/managerment/admin/update">
-                    <UpDateAdmin />
+                    <AdminUpdate />
                   </Route>
                   <Route path="/managerment/admin/updatefinish">
                     <UpdateFinish />

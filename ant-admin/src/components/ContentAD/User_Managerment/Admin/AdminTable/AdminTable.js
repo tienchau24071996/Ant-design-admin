@@ -69,9 +69,7 @@ class UserAdmin extends Component {
               onConfirm={this.handleDelete(record.key)}
             >
               <Popover content="Delete" onClick={this._preventEvent}>
-                <a href="/">
-                  <Icon type="delete" />
-                </a>
+                  <Icon type="delete" style={{color:"#1890ff"}} />
               </Popover>
             </Popconfirm>
           </span>
@@ -127,7 +125,7 @@ class UserAdmin extends Component {
   };
 
   handleDelete = key => event => {
-    event.stopPropagation();
+    event.stopPropagation();  
     const newData = [...this.state.newData];
     this.setState({ newData: newData.filter(item => item.key !== key) });
     axios.delete(
