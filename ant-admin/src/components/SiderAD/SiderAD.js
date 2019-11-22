@@ -16,14 +16,13 @@ export default class SiderAD extends Component {
         collapsed={collapsed}
         className="Sider"
       >
-          
-            <div className="logo">
+            <a className="logo" href="/" >
               <Avatar size={64} src="https://media.licdn.com/dms/image/C510BAQGEoHkIdPtXow/company-logo_400_400/0?e=1580947200&v=beta&t=8ujYl6meTinWVsT02DdvKaYS4QBd5dImav5yEsGfb2Y" />    
               <h2 style={{color:"#fff",marginBottom:0,paddingLeft: "10px"}}>Spirit Labs</h2>
-            </div>
+            </a>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]} >
           <Menu.Item key="1">
-              <NavLink to="/Dashboard" >
+              <NavLink to="/dashboard" >
                 <Icon type="pie-chart" />
                 <span>Dashboard</span>
               </NavLink>
@@ -32,29 +31,21 @@ export default class SiderAD extends Component {
           <SubMenu key="sub1"
             title={
               <span>
-                <Icon type="mail" />
+                <Icon type="user" />
                 <span>User Managerment</span>
               </span>
           }>
             <Menu.Item key="2">
-              <NavLink to="/Table-User" >
+              <NavLink to="/managerment/user?page=1" >
                 User
               </NavLink>
             </Menu.Item>
             <Menu.Item key="3">
-              <NavLink to="/Table-Admin" >
+              <NavLink to="/managerment/admin" >
                 Admin
               </NavLink>
             </Menu.Item>
-          </SubMenu>
-
-          <Menu.Item key="4">
-            <NavLink to="/User" >
-              <Icon type="user" />
-              <span>User Profile</span>
-            </NavLink>
-          </Menu.Item>
-          
+          </SubMenu> 
         </Menu>
       </Sider>
     );

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "./App.css";
-// import Home from './view/Home'
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
+import history from './history';
 import { Layout, Breadcrumb } from "antd";
 import Dashboard from "./components/ContentAD/Dashboard";
-import UserTable from "./components/ContentAD/Use_Managerment/UserTable";
-import UserProfile from "./components/ContentAD/UserProfile";
+import UserTable from "./components/ContentAD/User_Managerment/User/UserTable/UserTableContainer";
+import UserUpdate from "./components/ContentAD/User_Managerment/User/UserUpdate/UserUpdateContainer";
 import HeaderMenu from "./components/HeaderMenu/HeaderMenu";
 import SiderAD from "./components/SiderAD/SiderAD";
 import FooterAd from "./components/Footer/FooterAd";
@@ -26,7 +26,7 @@ export default class App extends Component {
   render() {
     let {collapsed} = this.state
     return (
-      <Router>
+      <Router history={history}>
         <Layout style={{ minHeight: "100vh" }}>
             <SiderAD collapsed={collapsed} />
             <Layout>
@@ -41,17 +41,17 @@ export default class App extends Component {
                     <Route exact path="/">
                       <Dashboard />
                     </Route>
-                    <Route path="/Dashboard">
+                    <Route path="/dashboard">
                       <Dashboard />
                     </Route>
-                    <Route path="/Table-User">
+                    <Route exact path="/managerment/user">
                       <UserTable />
                     </Route>
-                    <Route path="/Table-Admin">
-                      <div>admin</div>
+                    <Route path="/managerment/user/update">
+                      <UserUpdate />
                     </Route>
-                    <Route path="/User">
-                      <UserProfile />
+                    <Route path="/managerment/admin">
+                      <div>admin</div>
                     </Route>
                   </Switch>
                 </div>
