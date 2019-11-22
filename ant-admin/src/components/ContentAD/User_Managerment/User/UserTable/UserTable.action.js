@@ -60,14 +60,15 @@ const deleteUserFailure = error => ({
   error
 });
 
-export const onDeleteUser = key => {
+export const onDeleteUser = (key, callback) => {
   return async dispatch => {
     try {
       dispatch(deleteUserRequest());
-      const response = await axios.delete(
+      await axios.delete(
         `https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${key}`
       );
-       response.status === 200 ? dispatch(deleteUserSuccess(key)) : deleteUserFailure()
+      callback && callback()
+      return dispatch(deleteUserSuccess(key));
     } catch (error) {
       return deleteUserFailure(error);
     }

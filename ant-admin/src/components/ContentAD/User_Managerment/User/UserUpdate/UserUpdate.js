@@ -43,13 +43,14 @@ export default class UserUpdate extends Component {
   };
 
   componentDidMount() {
-    this.handleUser();
+    this.handleUser()
   }
 
-  handleUser = async () => {
-    await this.props.onGetUser();
-    this.setState({
-      userUpdate: this.props.userDetail
+  handleUser = () => {
+    this.props.onGetUser((data) => {
+      this.setState({
+        userUpdate: data
+      });
     });
   };
 
@@ -96,8 +97,6 @@ export default class UserUpdate extends Component {
     }
     let { userUpdate } = this.state;
     this.props.onUpdateUser(userUpdate);
-    console.log(userUpdate);
-    
   };
 
   handleChangeUpload = info => {
@@ -122,8 +121,7 @@ export default class UserUpdate extends Component {
         <Icon type={this.state.loading ? "loading" : "plus"} />
         <div className="ant-upload-text">Upload Avatar</div>
       </div>
-    );
-
+    );  
     return (
       <div style={{ paddingTop: "14px" }}>
         <Form>

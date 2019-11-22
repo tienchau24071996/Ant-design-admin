@@ -15,13 +15,14 @@ const getUserFailure = error => ({
   error
 });
 
-export const onGetUser = () => {
+export const onGetUser = callback => {
   return async dispatch => {
     try {
       dispatch(getUserRequest());
       const response = await axios.get(
         `https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${getInfoURL()}`
       );
+      callback && callback(response.data)
       return dispatch(getUserSuccess(response.data));
     } catch (error) {
       return dispatch(getUserFailure(error));
@@ -57,11 +58,8 @@ export const onUpdateUser = data => {
       const response = await axios.put(
         `https://5dca88d434d54a00143146f9.mockapi.io/api/v1/userClient/${data.id}`, data
       )
-      if(response.status === 200) {
+     
         return dispatch(updateUserSuccess(response.data));
-      } else {
-        return dispatch(updateUserFailure("Some thing went wrong!"));
-      }
     } catch (error) {
       return dispatch(updateUserFailure(error));
     }

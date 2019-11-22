@@ -93,13 +93,13 @@ class UserTable extends PureComponent {
               {this.props.user.length >= 1 ? (
                 <Popconfirm
                   title="Sure to delete?"
-                  onConfirm={() => this.handleDelete(record.key)}
+                  onConfirm={this.handleDelete(record.key)}
+                  onCancel={this._onCancel}
                 >
-                  <a href="/">
-                    <Popover content={deleteUser}>
-                      <Icon type="delete" />
+                    <Popover content={deleteUser} onClick={this._preventEvent}>
+                      <Icon style={{color:"#1890ff"}} type="delete" />
                     </Popover>
-                  </a>
+
                 </Popconfirm>
               ) : null}
             </span>
@@ -117,10 +117,11 @@ class UserTable extends PureComponent {
     this.getPageUrl()
   }
 
-  handleDelete = async (key) => {
-    await this.props.onDeleteUser(key)
-    await this.props.onGetListUser(this.state.currentPage)
-    await this.props.history.push(`/managerment/user?page=${this.state.currentPage}`);
+  handleDelete = key => event => {
+    event.stopPropagation()
+    this.props.onDeleteUser(key, () => {
+      this.props.onGetListUser(this.state.currentPage)
+    })
   };
 
   handlePagination = (page, pageSize) => {    
@@ -146,6 +147,16 @@ class UserTable extends PureComponent {
     })
   }
   
+  _onCancel = event => {
+    event.stopPropagation()
+  }
+  
+  _preventEvent = event => {
+    console.log(event);
+    
+    event.stopPropagation()
+  }
+  
   render() {
     const columns = this.columns.map(col => {
       if (!col.editable) {
@@ -161,12 +172,21 @@ class UserTable extends PureComponent {
       };
     });
     return (
-      <div>
+      <div> 
         <Table
           columns={columns}
           dataSource={this.props.user}
           scroll={{ x: 1600 }}
           pagination={false}
+          onRow={(record , index) => {
+            return {
+              onClick: () => {
+                this.props.history.push(
+                  `/managerment/user/update?id=${record.id}`
+                )
+              }
+            }
+          }}
         ></Table>
         <Pagination
           style={{ textAlign: "right", paddingTop: "20px" }}
