@@ -38,7 +38,7 @@ export default class SiderAD extends Component {
     let { collapsed } = this.props;
     return (
       <Sider trigger={null} collapsible collapsed={collapsed} className="Sider">
-        <NavLink to="/dashboard">
+        <NavLink to="/dashboard" onClick={this.handleClickDashDoard}>
           <div className="logo">
             <Avatar
               size={64}
