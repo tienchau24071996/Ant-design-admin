@@ -13,36 +13,45 @@ export default class SiderAD extends Component {
   componentDidMount() {
     const url_string = window.location.href;
     const url = new URL(url_string).pathname;
+    if (url === "/managerment/user" || url === "/managerment/user/update") {
+      this.setState({ temp: "2" });
+    }
     if (url === "/managerment/admin" || url === "/managerment/admin/update") {
       this.setState({ temp: "3" });
     }
   }
+
+  handleClickUser = () => {
+    this.setState({ temp: "2" });
+  };
+
   handleClickAdmin = () => {
     this.setState({ temp: "3" });
-  }
+  };
+
   handleClickDashDoard = () => {
     this.setState({ temp: "1" });
-  }
+  };
+
   render() {
     let { temp } = this.state;
     let { collapsed } = this.props;
     return (
       <Sider trigger={null} collapsible collapsed={collapsed} className="Sider">
-        <div className="logo">
-          <Avatar
-            size={64}
-            src="https://media.licdn.com/dms/image/C510BAQGEoHkIdPtXow/company-logo_400_400/0?e=1580947200&v=beta&t=8ujYl6meTinWVsT02DdvKaYS4QBd5dImav5yEsGfb2Y"
-          />
-          <h2 style={{ color: "#fff", marginBottom: 0, paddingLeft: "10px" }}>
-            Spirit Labs
-          </h2>
-        </div>
+        <NavLink to="/dashboard">
+          <div className="logo">
+            <Avatar
+              size={64}
+              src="https://media.licdn.com/dms/image/C510BAQGEoHkIdPtXow/company-logo_400_400/0?e=1580947200&v=beta&t=8ujYl6meTinWVsT02DdvKaYS4QBd5dImav5yEsGfb2Y"
+            />
+            <h2 style={{ color: "#fff", marginBottom: 0, paddingLeft: "10px" }}>
+              Spirit Labs
+            </h2>
+          </div>
+        </NavLink>
         <Menu theme="dark" mode="inline" selectedKeys={[temp]}>
           <Menu.Item key="1">
-            <NavLink
-              to="/dashboard"
-              onClick={this.handleClickDashDoard}
-            >
+            <NavLink to="/dashboard" onClick={this.handleClickDashDoard}>
               <Icon type="pie-chart" />
               <span>Dashboard</span>
             </NavLink>
@@ -58,7 +67,12 @@ export default class SiderAD extends Component {
             }
           >
             <Menu.Item key="2">
-              <NavLink to="/managerment/user?page=1">User</NavLink>
+              <NavLink
+                to="/managerment/user?page=1"
+                onClick={this.handleClickUser}
+              >
+                User
+              </NavLink>
             </Menu.Item>
             <Menu.Item key="3">
               <NavLink
