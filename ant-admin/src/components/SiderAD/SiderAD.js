@@ -52,13 +52,13 @@ export default class SiderAD extends Component {
             key="sub1"
             title={
               <span>
-                <Icon type="mail" />
+                <Icon type="user" />
                 <span>User Managerment</span>
               </span>
             }
           >
             <Menu.Item key="2">
-              <NavLink to="/managerment/user">User</NavLink>
+              <NavLink to="/managerment/user?page=1">User</NavLink>
             </Menu.Item>
             <Menu.Item key="3">
               <NavLink
