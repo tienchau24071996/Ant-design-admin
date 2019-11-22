@@ -152,8 +152,6 @@ class UserTable extends PureComponent {
   }
   
   _preventEvent = event => {
-    console.log(event);
-    
     event.stopPropagation()
   }
   
