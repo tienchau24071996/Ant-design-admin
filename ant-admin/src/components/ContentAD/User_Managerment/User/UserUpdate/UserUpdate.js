@@ -12,8 +12,8 @@ import {
   Icon,
   message
 } from "antd";
-import moment from "moment"
-import "./UserUpdate.css"
+import moment from "moment";
+import "./UserUpdate.css";
 
 const { Option } = Select;
 const dateFormat = "MM/DD/YYYY";
@@ -39,15 +39,17 @@ function beforeUpload(file) {
 export default class UserUpdate extends Component {
   state = {
     loading: false,
-    userUpdate: {}
+    userUpdate: {
+      firstName: ""
+    }
   };
 
   componentDidMount() {
-    this.handleUser()
+    this.handleUser();
   }
 
   handleUser = () => {
-    this.props.onGetUser((data) => {
+    this.props.onGetUser(data => {
       this.setState({
         userUpdate: data
       });
@@ -73,11 +75,11 @@ export default class UserUpdate extends Component {
     }));
   };
 
-  handleChangeDate = (event, t) => {
+  handleChangeDate = (event, dateString) => {
     this.setState(prevState => ({
       userUpdate: {
         ...prevState.userUpdate,
-        birthday: t
+        birthday: dateString
       }
     }));
   };
@@ -121,7 +123,8 @@ export default class UserUpdate extends Component {
         <Icon type={this.state.loading ? "loading" : "plus"} />
         <div className="ant-upload-text">Upload Avatar</div>
       </div>
-    );  
+    );
+    const checkFirstName = (!this.props.isLoading && !userUpdate.firstName)
     return (
       <div style={{ paddingTop: "14px" }}>
         <Form>
@@ -153,21 +156,30 @@ export default class UserUpdate extends Component {
             <Col xs={24} sm={24} md={18}>
               <Row>
                 <Col span={12} style={{ paddingRight: "30px" }}>
-                  <Form.Item>
+                  <Form.Item style={{ margin: 0 }}>
                     <span>First name</span>
                     <Input
-                      name="first_name"
-                      value={userUpdate.first_name}
+                      className={checkFirstName ? "test" : null}
+                      name="firstName"
+                      value={userUpdate.firstName}
                       onChange={this.handleChange}
+                      autoComplete={"off"}
                     />
+                    {checkFirstName ? (
+                      <div style={{ color: "#f5222d" }}>
+                        Invalid first name, please enter again
+                      </div>
+                    ) : (
+                      <div style={{ height: "40px" }}></div>
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item>
                     <span>Last name</span>
                     <Input
-                      name="last_name"
-                      value={userUpdate.last_name}
+                      name="lastName"
+                      value={userUpdate.lastName}
                       onChange={this.handleChange}
                     />
                   </Form.Item>
@@ -244,6 +256,7 @@ export default class UserUpdate extends Component {
                       ? "error"
                       : "success"
                   )}
+                  disabled = {false}
                 >
                   Update
                 </Button>

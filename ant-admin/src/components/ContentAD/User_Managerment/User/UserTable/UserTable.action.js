@@ -2,16 +2,16 @@ import { UserTableType } from "./UserTable.type";
 import axios from "axios";
 
 const getListUserRequest = () => ({
-  type: UserTableType.getListUserRequest
+  type: UserTableType.GetListUserRequest
 });
 
 const getListUserSuccess = response => ({
-  type: UserTableType.getListUserSuccess,
+  type: UserTableType.GetListUserSuccess,
   response
 });
 
 const getListUserFailure = error => ({
-  type: UserTableType.getListUserFailure,
+  type: UserTableType.GetListUserFailure,
   error
 });
 
@@ -34,29 +34,29 @@ const formatData = userList => {
   return userList.map(item => ({
     key: item.id,
     id: item.id,
-    firstName: item.first_name,
-    lastName: item.last_name,
+    firstName: item.firstName,
+    lastName: item.lastName,
     gender: item.gender,
     country: item.country,
     email: item.email,
     birthday: item.birthday,
     companyName: item.companyName,
     gevmeEmail: item.gevmeEmail,
-    isPrenium: item.isPrenium ? "Yes" : "No"
+    isPrenium: item.isPrenium ? "Yes" : "No",
   }));
 };
 
 const deleteUserRequest = () => ({
-  type: UserTableType.deleteUserRequest
+  type: UserTableType.DeleteUserRequest
 });
 
 const deleteUserSuccess = response => ({
-  type: UserTableType.deleteUserSuccess,
+  type: UserTableType.DeleteUserSuccess,
   response
 });
 
 const deleteUserFailure = error => ({
-  type: UserTableType.deleteUserFailure,
+  type: UserTableType.DeleteUserFailure,
   error
 });
 

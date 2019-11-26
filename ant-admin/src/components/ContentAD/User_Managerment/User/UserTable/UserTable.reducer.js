@@ -9,10 +9,10 @@ const initialState = {
 
 export const userTableReducer = (state = initialState, action) => {
   switch (action.type) {
-    case UserTableType.getListUserRequest: {
+    case UserTableType.GetListUserRequest: {
       return { ...state, isLoading: true };
     }
-    case UserTableType.getListUserSuccess: {
+    case UserTableType.GetListUserSuccess: {
       return {
         ...state,
         isLoading: false,
@@ -21,7 +21,7 @@ export const userTableReducer = (state = initialState, action) => {
         user: action.response
       };
     }
-    case UserTableType.getListUserFailure: {
+    case UserTableType.GetListUserFailure: {
       return {
         ...state,
         isLoading: false,
@@ -30,10 +30,10 @@ export const userTableReducer = (state = initialState, action) => {
       }; 
     }
 
-    case UserTableType.deleteUserRequest: {
+    case UserTableType.DeleteUserRequest: {
         return {...state, isLoading: false}
     }
-    case UserTableType.deleteUserSuccess: {
+    case UserTableType.DeleteUserSuccess: {
         return {
             ...state,
             isLoading: true,
@@ -42,7 +42,7 @@ export const userTableReducer = (state = initialState, action) => {
             user: state.user.filter(item => item.key !== action.response)
         }
     }
-    case UserTableType.deleteUserFailure: {
+    case UserTableType.DeleteUserFailure: {
         return{
             ...state,
             isLoading: false,

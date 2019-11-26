@@ -18,3 +18,12 @@
     height: 104px;
     object-fit: cover;
 }
+
+.test {
+    border: 1px solid #f5222d
+}
+
+.test:focus {
+    box-shadow: 0 0 0 2px #f5222d33;
+    border: 1px solid #f5222d
+}

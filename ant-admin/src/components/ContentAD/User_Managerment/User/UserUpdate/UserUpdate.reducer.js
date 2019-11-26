@@ -9,11 +9,11 @@ const initialState = {
 
 export const userUpdateReducer = (state = initialState, action) => {
   switch (action.type) {
-    case UserUpdateType.getUserRequest: {
+    case UserUpdateType.GetUserRequest: {
       return { ...state, isLoading: true };
     }
 
-    case UserUpdateType.getUserSuccess: {
+    case UserUpdateType.GetUserSuccess: {
       return {
         ...state,
         isLoading: false,
@@ -23,7 +23,7 @@ export const userUpdateReducer = (state = initialState, action) => {
       };
     }
 
-    case UserUpdateType.getUserFailure: {
+    case UserUpdateType.GetUserFailure: {
       return {
         ...state,
         isLoading: false,
@@ -32,11 +32,11 @@ export const userUpdateReducer = (state = initialState, action) => {
       };
     }
 
-    case UserUpdateType.updateUserRequest: {
+    case UserUpdateType.UpdateUserRequest: {
       return { ...state, isLoading: true };
     }
 
-    case UserUpdateType.updateUserSuccess: {
+    case UserUpdateType.UpdateUserSuccess: {
       return {
         ...state,
         isLoading: false,
@@ -46,7 +46,7 @@ export const userUpdateReducer = (state = initialState, action) => {
       };
     }
 
-    case UserUpdateType.updateUserFailure: {
+    case UserUpdateType.UpdateUserFailure: {
       return {
         ...state,
         isLoading: false,
