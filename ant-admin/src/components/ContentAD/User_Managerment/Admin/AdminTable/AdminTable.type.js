@@ -1,9 +1,9 @@
 export const AdminTableType = {
-    getListAdminRequest:"AdminTable/GetData/REQUEST",
-    getListAdminSucccess:"AdminTable/GetData/SUCCESS",
-    getListAdminFailure:"AdminTable/GetData/FAILURE",
+    GetListAdminRequest:"adminTable/GetData/REQUEST",
+    GetListAdminSucccess:"adminTable/GetData/SUCCESS",
+    GetListAdminFailure:"adminTable/GetData/FAILURE",
 
-    deleteAdminRequest:"AdminTable/Delete/REQUEST",
-    deleteAdminSucccess:"AdminTable/Delete/Succcess",
-    deleteAdminFailure:"AdminTable/Delete/Failure"
+    DeleteAdminRequest:"adminTable/Delete/REQUEST",
+    DeleteAdminSucccess:"adminTable/Delete/Succcess",
+    DeleteAdminFailure:"adminTable/Delete/Failure"
 }

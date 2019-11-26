@@ -1,21 +1,22 @@
-import { AdminTableType } from "./AdminTable.type";
+import { AdminUpdateType } from "./AdminUpdate.type";
 
 const initialState = {
-  dataAdmin: [],
+  dataAdmin: {},
   isLoading: false,
   isError: false,
   errorMessage: ""
 };
 
-export const adminTableReducer = (state = initialState, action) => {
+export const adminUpdateReducer = (state = initialState, action) => {
   switch (action.type) {
-    case AdminTableType.GetListAdminRequest: {
+    case AdminUpdateType.GetAdminRequest: {
       return {
         ...state,
         isLoading: true
       };
     }
-    case AdminTableType.GetListAdminSucccess: {
+
+    case AdminUpdateType.GetAdminSucccess: {
       return {
         ...state,
         isLoading: false,
@@ -25,7 +26,7 @@ export const adminTableReducer = (state = initialState, action) => {
       };
     }
 
-    case AdminTableType.GetListAdminFailure: {
+    case AdminUpdateType.GetAdminFailure: {
       return {
         ...state,
         isLoading: false,
@@ -33,22 +34,25 @@ export const adminTableReducer = (state = initialState, action) => {
         errorMessage: "Fail"
       };
     }
-    case AdminTableType.DeleteAdminRequest: {
+
+    case AdminUpdateType.UpdateAdminRequest: {
       return {
         ...state,
         isLoading: true
       };
     }
-    case AdminTableType.DeleteAdminSucccess: {
+
+    case AdminUpdateType.UpdateAdminSucccess: {
       return {
         ...state,
         isLoading: false,
         isError: false,
         errorMessage: "",
-        dataAdmin: state.dataAdmin.filter(item => item.key !== action.response)
+        dataAdmin: action.response
       };
     }
-    case AdminTableType.DeleteAdminFailure: {
+
+    case AdminUpdateType.UpdateAdminFailure: {
       return {
         ...state,
         isLoading: false,

@@ -1,36 +1,42 @@
 import React, { Component } from "react";
-import { Form, Input, Row, Col, Button, Select, DatePicker, Alert, Icon } from "antd";
+import {
+  Form,
+  Input,
+  Row,
+  Col,
+  Button,
+  Select,
+  DatePicker,
+  Icon
+} from "antd";
 import { NavLink } from "react-router-dom";
 import validator from "validator";
-import axios from "axios";
 
 const dateFormatList = ["MM/DD/YYYY", "MM/DD/YY"];
 
 const { Option } = Select;
+
 const ButtonGroup = Button.Group;
 
 export default class AddAdmin extends Component {
   state = {
-    dataSource: {
+    dataAdmin: {
       first_name: "",
       last_name: "",
-      Country: "",
-      Email: "",
-      Company: "",
-      GevmeEmail: "nhanle434@gmail.com",
-      Gender: "",
-      Birthday: null,
-      Prenium: "Yes"
+      country: "",
+      email: "",
+      company: "",
+      gender: "",
+      birthday: null,
     },
-    TestBirthday: true,
-    emailError: false
+    Testbirthday: false,
+    emailError: false,
   };
+
   handleAdd = () => {
-    let { dataSource } = this.state;
-    axios
-      .post(`http://5dcb85f734d54a0014315051.mockapi.io/api/admin/`, dataSource)
-      .then(res => {});
+    this.props.onUpAdmin(this.state.dataAdmin);
   };
+
   handleGetDate = (moment, dateString) => {
     let datenow = new Date();
     let yearnow = datenow.getFullYear();
@@ -41,36 +47,35 @@ export default class AddAdmin extends Component {
     let monthnew = datenew.getUTCMonth() + 1;
     let daynew = ("0" + datenew.getDate()).slice(-2);
     this.setState(prevState => ({
-      dataSource: {
-        ...prevState.dataSource,
-        Birthday: dateString
+      dataAdmin: {
+        ...prevState.dataAdmin,
+        birthday: dateString
       }
     }));
     if (yearnew > yearnow) {
-      this.setState({ TestBirthday: false });
+      this.setState({ Testbirthday: true });
     } else if (yearnew < yearnow) {
-      this.setState({ TestBirthday: false });
+      this.setState({ Testbirthday: false });
     } else if ((yearnew = yearnow)) {
       if (monthnew < monthnow) {
-        this.setState({ TestBirthday: true });
+        this.setState({ Testbirthday: false });
       } else if (monthnew > monthnow) {
-        this.setState({ TestBirthday: false });
+        this.setState({ Testbirthday: true });
       } else if ((monthnew = monthnow)) {
         if (daynew >= daynow) {
-          this.setState({ TestBirthday: false });
+          this.setState({ Testbirthday: true });
         } else if (datenew < datenow) {
-          this.setState({ TestBirthday: true });
+          this.setState({ Testbirthday: false });
         }
       }
     }
-    console.log(this.state.TestBirthday);
   };
 
   handleSelect = event => {
     this.setState(prevState => ({
-      dataSource: {
-        ...prevState.dataSource,
-        Gender: event
+      dataAdmin: {
+        ...prevState.dataAdmin,
+        gender: event
       }
     }));
   };
@@ -78,8 +83,8 @@ export default class AddAdmin extends Component {
   handleGetValue = event => {
     const { name, value } = event.target;
     this.setState(prevState => ({
-      dataSource: {
-        ...prevState.dataSource,
+      dataAdmin: {
+        ...prevState.dataAdmin,
         [name]: value
       }
     }));
@@ -88,8 +93,8 @@ export default class AddAdmin extends Component {
   handleChangeEmail = event => {
     const { name, value } = event.target;
     this.setState(prevState => ({
-      dataSource: {
-        ...prevState.dataSource,
+      dataAdmin: {
+        ...prevState.dataAdmin,
         [name]: value
       }
     }));
@@ -103,14 +108,22 @@ export default class AddAdmin extends Component {
   };
 
   render() {
-    let { emailError, TestBirthday } = this.state;
+    let { emailError, Testbirthday, dataAdmin } = this.state;
+    const disabled = (!Testbirthday &&
+      !emailError &&
+      dataAdmin.first_name &&
+      dataAdmin.last_name &&
+      dataAdmin.country &&
+      dataAdmin.email &&
+      dataAdmin.birthday &&
+      dataAdmin.company) ? false : true
     return (
       <div>
         <ButtonGroup style={{ marginBottom: 16 }}>
           <NavLink to="/managerment/admin">
-            <Button type="primary">
+            <Button type="primary" style={{ borderRadius: "6px" }}>
               <Icon type="left" />
-              <span style={{fontSize:"16px"}}>Back</span>
+              <span style={{ fontSize: "16px" }}>Back</span>
             </Button>
           </NavLink>
         </ButtonGroup>
@@ -121,45 +134,45 @@ export default class AddAdmin extends Component {
               <Form.Item label="First name">
                 <Input
                   onChange={this.handleGetValue}
-                  value={this.state.dataSource.first_name}
+                  value={this.state.dataAdmin.first_name}
                   name="first_name"
                 />
               </Form.Item>
               <Form.Item label="Last Name">
                 <Input
                   onChange={this.handleGetValue}
-                  value={this.state.dataSource.last_name}
+                  value={this.state.dataAdmin.last_name}
                   name="last_name"
                 />
               </Form.Item>
               <Form.Item label="Gender">
                 <Select
                   onChange={this.handleSelect}
-                  value={this.state.dataSource.Gender}
-                  name="Gender"
+                  value={this.state.dataAdmin.gender}
+                  name="gender"
                 >
                   <Option value="Female">Female</Option>
                   <Option value="Male">Male</Option>
+                  <Option value="Other">Other</Option>
                 </Select>{" "}
               </Form.Item>
               <Form.Item label="Country">
                 <Input
                   onChange={this.handleGetValue}
-                  value={this.state.dataSource.Country}
-                  name="Country"
+                  value={this.state.dataAdmin.country}
+                  name="country"
                 />
               </Form.Item>
               <Form.Item label="Email">
                 <Input
                   onChange={this.handleChangeEmail}
-                  value={this.state.dataSource.Email}
-                  name="Email"
+                  value={this.state.dataAdmin.email}
+                  name="email"
                 />
                 {emailError ? (
-                  <Alert
-                    message="Invalid message, please enter again"
-                    type="error"
-                  />
+                  <div style={{ color: "red" }}>
+                    Invalid email, please enter again
+                  </div>
                 ) : null}
               </Form.Item>
               <Form.Item label="Birthday">
@@ -168,30 +181,31 @@ export default class AddAdmin extends Component {
                   format={dateFormatList}
                   style={{ width: "100%" }}
                 />
-                {!TestBirthday ? (
-                  <Alert
-                    message="Date of birth must be before the current date, please enter again"
-                    type="error"
-                  />
+                {Testbirthday ? (
+                  <div style={{ color: "red" }}>
+                    Invalid birthday, please enter again
+                  </div>
                 ) : null}
               </Form.Item>
               <Form.Item label="Company">
                 <Input
                   onChange={this.handleGetValue}
-                  value={this.state.dataSource.Company}
-                  name="Company"
+                  value={this.state.dataAdmin.company}
+                  name="company"
                 />
               </Form.Item>
             </Col>
           </Row>
           <div style={{ textAlign: "right" }}>
-            <Button
-              onClick={this.handleAdd}
-              type="primary"
-              style={{ marginBottom: 16 }}
-            >
-              <NavLink to="/managerment/admin/updatefinish">Add</NavLink>
-            </Button>
+              <Button
+                onClick={this.handleAdd}
+                type="primary"
+                style={{ marginBottom: 16 }}
+                disabled={disabled}
+              >
+                <NavLink to="/managerment/admin/updatefinish">Add</NavLink>
+              </Button>
+            
           </div>
         </Form>
       </div>

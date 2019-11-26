@@ -15,7 +15,6 @@ export default class UpdateFinish extends Component {
             </Button>
           ]}
         />
-        ,
       </div>
     );
   }

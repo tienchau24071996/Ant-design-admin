@@ -10,8 +10,8 @@ import HeaderMenu from "./components/HeaderMenu/HeaderMenu";
 import SiderAD from "./components/SiderAD/SiderAD";
 import FooterAd from "./components/Footer/FooterAd";
 import AdminTable from "./components/ContentAD/User_Managerment/Admin/AdminTable/AdminTableContainer";
-import AdminAdd from "./components/ContentAD/User_Managerment/Admin/AdminAdd/AdminAdd";
-import AdminUpdate from "./components/ContentAD/User_Managerment/Admin/AdminUpdate/AdminUpdate";
+import AdminAdd from "./components/ContentAD/User_Managerment/Admin/AdminAdd/AdminAddContainer";
+import AdminUpdate from "./components/ContentAD/User_Managerment/Admin/AdminUpdate/AdminUpdateContainer";
 import UpdateFinish from "./components/ContentAD/User_Managerment/Admin/UpdateFinish";
 const { Content } = Layout;
 

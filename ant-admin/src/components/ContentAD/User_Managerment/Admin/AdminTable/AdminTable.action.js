@@ -1,31 +1,31 @@
 import { AdminTableType } from "./AdminTable.type";
 import axios from "axios";
 
-const getListAdminRequest = () => ({
-  type: AdminTableType.getListAdminRequest
-});
+const GetListAdminRequest = () => ({
+  type: AdminTableType.GetListAdminRequest
+})
 
-const getListAdminSuccess = response => ({
-  type: AdminTableType.getListAdminSucccess,
+const GetListAdminSuccess = response => ({
+  type: AdminTableType.GetListAdminSucccess,
   response
-});
+})
 
-const getListAdminFailure = error => ({
-  type: AdminTableType.getListAdminFailure,
+const GetListAdminFailure = error => ({
+  type: AdminTableType.GetListAdminFailure,
   error
-});
+})
 
 export const onGetListAdmin = page => {
   return async dispatch => {
     try {
-      dispatch(getListAdminRequest());
+      dispatch(GetListAdminRequest());
       const response = await axios.get(
         `http://5dcb85f734d54a0014315051.mockapi.io/api/admin?page=${page}&limit=10`
       );
       const data = formatData(response.data)
-      return dispatch(getListAdminSuccess(data))
+      return dispatch(GetListAdminSuccess(data))
     } catch (error) {
-      return dispatch(getListAdminFailure(error));
+      return dispatch(GetListAdminFailure(error));
     }
   };
 };
@@ -36,36 +36,42 @@ const formatData = adminList => {
     key: item.id,
     first_name: item.first_name,
     last_name: item.last_name,
-    Gender: item.Gender,
-    Country: item.Country,
-    Email: item.Email,
-    Birthday: item.Birthday,
-    Company: item.Company,
-    GevmeEmail: item.GevmeEmail,
-    Premium: item.Premium ? "Yes" : "No"
+    gender: item.gender,
+    country: item.country,
+    email: item.email,
+    birthday: item.birthday,
+    company: item.company,
   }));
-};
+}
 
-const deleteAdminRequest = () => ({
-    type: AdminTableType.deleteAdminRequest
-});
+const DeleteAdminRequest = () => ({
+    type: AdminTableType.DeleteAdminRequest
+})
 
-const deleteAdminSuccess = () => ({
-    type: deleteAdminSuccess
-});
+const DeleteAdminSuccess = response => ({
+    type: DeleteAdminSuccess,
+    response
+})
 
-const deleteAdminFailure = error => ({
-    type: deleteAdminFailure,
+const DeleteAdminFailure = error => ({
+    type: DeleteAdminFailure,
     error
 })
 
-export const onDeleteAdmin = () => {
+export const onDeleteAdmin = (key,callback) => {
     return async dispatch => {
         try{
-          dispatch(deleteAdminRequest());
+          dispatch(DeleteAdminRequest());
+          await axios.delete(
+            `http://5dcb85f734d54a0014315051.mockapi.io/api/admin/${key}`
+          );
+          callback && callback()
+          return (
+            dispatch(DeleteAdminSuccess(key))
+          )
         }
         catch (error) {
-            return dispatch(deleteAdminFailure(error))
+            return dispatch(DeleteAdminFailure(error))
         }
     }
 }

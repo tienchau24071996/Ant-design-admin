@@ -9,7 +9,6 @@ import {
   Popconfirm
 } from "antd";
 import { NavLink, withRouter } from "react-router-dom";
-import axios from "axios";
 
 class UserAdmin extends Component {
   constructor(props) {
@@ -18,37 +17,37 @@ class UserAdmin extends Component {
       {
         title: "Fist Name",
         dataIndex: "first_name",
-        key: "FistName"
+        key: "fistName"
       },
       {
         title: "Last Name",
         dataIndex: "last_name",
-        key: "LastName"
+        key: "lastName"
       },
       {
         title: "Gender",
-        dataIndex: "Gender",
-        key: "Gender"
+        dataIndex: "gender",
+        key: "gender"
       },
       {
         title: "Country",
-        dataIndex: "Country",
-        key: "Country"
+        dataIndex: "country",
+        key: "country"
       },
       {
         title: "Email Address",
-        dataIndex: "Email",
-        key: "Email"
+        dataIndex: "email",
+        key: "email"
       },
       {
         title: "Birthday",
-        dataIndex: "Birthday",
-        key: "Birthday"
+        dataIndex: "birthday",
+        key: "birthday"
       },
       {
         title: "Company",
-        dataIndex: "Company",
-        key: "Company"
+        dataIndex: "company",
+        key: "company"
       },
       {
         title: "Action",
@@ -69,7 +68,7 @@ class UserAdmin extends Component {
               onConfirm={this.handleDelete(record.key)}
             >
               <Popover content="Delete" onClick={this._preventEvent}>
-                  <Icon type="delete" style={{color:"#1890ff"}} />
+                <Icon type="delete" style={{ color: "#1890ff" }} />
               </Popover>
             </Popconfirm>
           </span>
@@ -93,9 +92,8 @@ class UserAdmin extends Component {
 
   handleChangePage = (page = 1, pageSize) => {
     this.setState({ currentPage: Number(page) });
-    this.props.onGetListAdmin(page)
+    this.props.onGetListAdmin(page);
     this.props.history.push(`/managerment/admin?page=${page}`);
-    
   };
 
   _preventEvent = event => {
@@ -103,13 +101,10 @@ class UserAdmin extends Component {
   };
 
   handleDelete = key => event => {
-    event.stopPropagation();  
-    const newData = [...this.state.newData];
-    this.setState({ newData: newData.filter(item => item.key !== key) });
-    axios.delete(
-      `http://5dcb85f734d54a0014315051.mockapi.io/api/admin/${key}`,
-      newData
-    );
+    event.stopPropagation();
+    this.props.onDeleteAdmin(key, () => {
+      this.props.onGetListAdmin(this.state.currentPage);
+    });
   };
 
   getURL = () => {

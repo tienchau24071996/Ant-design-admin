@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Form, Row, Col, Input, Select, DatePicker, Button, Alert,Icon } from "antd";
+import { Form, Row, Col, Input, Select, DatePicker, Button, Icon } from "antd";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
 import moment from "moment";
 import validator from "validator";
 
@@ -11,36 +10,22 @@ const ButtonGroup = Button.Group;
 
 export default class UpdateAdmin extends Component {
   state = {
-    user: {
-      dataSource: {
-        first_name: "",
-        last_name: "",
-        Country: "",
-        Email: "",
-        Company: "",
-        gevmeEmail: "nhanle434@gmail.com",
-        Gender: "",
-        Birthday: null,
-        prenium: "Yes"
-      }
-    },
+    adminUpdate: {},
     emailError: false,
-    TestBirthday: true
+    TestBirthday: false
   };
 
   componentDidMount() {
-    const url_string = window.location.href;
-    const url = new URL(url_string);
-    const id = url.searchParams.get("id");
-    axios
-      .get(`http://5dcb85f734d54a0014315051.mockapi.io/api/admin/${id}`)
-      .then(res => {
-        const user = res.data;
-        this.setState({
-          user
-        });
-      });
+    this.handleAdmin();
   }
+
+  handleAdmin = () => {
+    this.props.onGetAdmin(data => {
+      this.setState({
+        adminUpdate: data
+      });
+    });
+  };
 
   handleChangeDate = (moment, dateString) => {
     let datenow = new Date();
@@ -52,25 +37,25 @@ export default class UpdateAdmin extends Component {
     let monthnew = datenew.getUTCMonth() + 1;
     let daynew = ("0" + datenew.getDate()).slice(-2);
     this.setState(prevState => ({
-      user: {
-        ...prevState.user,
-        Birthday: dateString
+      adminUpdate: {
+        ...prevState.adminUpdate,
+        birthday: dateString
       }
     }));
     if (yearnew > yearnow) {
-      this.setState({ TestBirthday: false });
+      this.setState({ TestBirthday: true });
     } else if (yearnew < yearnow) {
       this.setState({ TestBirthday: false });
     } else if ((yearnew = yearnow)) {
       if (monthnew < monthnow) {
-        this.setState({ TestBirthday: true });
-      } else if (monthnew > monthnow) {
         this.setState({ TestBirthday: false });
+      } else if (monthnew > monthnow) {
+        this.setState({ TestBirthday: true });
       } else if ((monthnew = monthnow)) {
         if (daynew >= daynow) {
-          this.setState({ TestBirthday: false });
-        } else if (datenew < datenow) {
           this.setState({ TestBirthday: true });
+        } else if (datenew < datenow) {
+          this.setState({ TestBirthday: false });
         }
       }
     }
@@ -79,56 +64,52 @@ export default class UpdateAdmin extends Component {
   handleChange = event => {
     const { name, value } = event.target;
     this.setState(prevState => ({
-      user: {
-        ...prevState.user,
+      adminUpdate: {
+        ...prevState.adminUpdate,
         [name]: value
       }
     }));
   };
+
   handleChangeSelect = event => {
     this.setState(prevState => ({
-      user: {
-        ...prevState.user,
-        Gender: event
+      adminUpdate: {
+        ...prevState.adminUpdate,
+        gender: event
       }
     }));
   };
+
   handleErrorEmail = value => {
     this.setState({
       emailError: !validator.isEmail(value)
     });
   };
+
   handleChangeEmail = event => {
     const { name, value } = event.target;
     this.setState(prevState => ({
-      user: {
-        ...prevState.user,
+      adminUpdate: {
+        ...prevState.adminUpdate,
         [name]: value
       }
     }));
     this.handleErrorEmail(event.target.value);
   };
+
   handleClick = () => {
-    const url_string = window.location.href;
-    const url = new URL(url_string);
-    const id = url.searchParams.get("id");
-    let { user } = this.state;
-    axios
-      .put(`http://5dcb85f734d54a0014315051.mockapi.io/api/admin/${id}`, user)
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      });
+    this.props.onUpdateAdmin(this.state.adminUpdate);
   };
+
   render() {
-    let { user, emailError, TestBirthday } = this.state;
+    let { emailError, TestBirthday, adminUpdate } = this.state;
     return (
       <div>
         <ButtonGroup style={{ marginBottom: 16 }}>
           <NavLink to="/managerment/admin">
             <Button type="primary">
               <Icon type="left" />
-              <span style={{fontSize:"16px"}}>Back</span>
+              <span style={{ fontSize: "16px" }}>Back</span>
             </Button>
           </NavLink>
         </ButtonGroup>
@@ -137,23 +118,35 @@ export default class UpdateAdmin extends Component {
             <Col xs={24} sm={24} md={6} style={{ width: "100%" }}>
               <Row style={{ height: "100%" }}>
                 <Col>
-                  <Form.Item>
+                  <Form.Item style={{ marginBottom: "0px" }}>
                     <span>First name</span>
                     <Input
                       name="first_name"
                       onChange={this.handleChange}
-                      value={user.first_name}
+                      value={adminUpdate.first_name}
                     />
+                    {!this.props.isLoading &&
+                    !this.state.adminUpdate.first_name ? (
+                      <div style={{ height: "30px", color:"red" }}>Can't empty</div>
+                    ) : (
+                      <div style={{ height: "30px" }}></div>
+                    )}
                   </Form.Item>
                 </Col>
                 <Col>
-                  <Form.Item>
+                  <Form.Item style={{ marginBottom: "0px" }}>
                     <span>Last name</span>
                     <Input
                       name="last_name"
                       onChange={this.handleChange}
-                      value={user.last_name}
+                      value={adminUpdate.last_name}
                     />
+                    {!this.props.isLoading &&
+                    !this.state.adminUpdate.last_name ? (
+                      <div style={{ height: "30px", color:"red" }}>Can't empty</div>
+                    ) : (
+                      <div style={{ height: "30px" }}></div>
+                    )}
                   </Form.Item>
                 </Col>
               </Row>
@@ -165,7 +158,7 @@ export default class UpdateAdmin extends Component {
                     <Select
                       name="gender"
                       onChange={this.handleChangeSelect}
-                      value={user.Gender}
+                      value={adminUpdate.gender}
                     >
                       <Option value="Male">Male</Option>
                       <Option value="Female">Female</Option>
@@ -182,14 +175,15 @@ export default class UpdateAdmin extends Component {
                       onChange={this.handleChangeDate}
                       style={{ width: "100%" }}
                       value={
-                        user.Birthday ? moment(user.Birthday, dateFormat) : null
+                        adminUpdate.birthday
+                          ? moment(adminUpdate.birthday, dateFormat)
+                          : null
                       }
                     />
-                    {!TestBirthday ? (
-                      <Alert
-                        message="Date of birth must be before the current date, please enter again"
-                        type="error"
-                      />
+                    {TestBirthday ? (
+                      <div style={{ color: "red" }}>
+                        Invalid birthday, please enter again
+                      </div>
                     ) : null}
                   </Form.Item>
                 </Col>
@@ -198,25 +192,29 @@ export default class UpdateAdmin extends Component {
               <Form.Item>
                 <span>Email</span>
                 <Input
-                  name="Email"
+                  name="email"
                   onChange={this.handleChangeEmail}
-                  value={user.Email}
+                  value={adminUpdate.email}
                 />
                 {emailError ? (
-                  <Alert
-                    message="Invalid message, please enter again"
-                    type="error"
-                  />
+                  <div style={{ color: "red" }}>
+                    Invalid email, please enter again
+                  </div>
                 ) : null}
               </Form.Item>
 
               <Form.Item>
                 <span>Country</span>
                 <Input
-                  name="Country"
+                  name="country"
                   onChange={this.handleChange}
-                  value={user.Country}
+                  value={adminUpdate.country}
                 />
+                {!this.props.isLoading && !this.state.adminUpdate.country ? (
+                  <div style={{ height: "30px", color:"red" }}>Can't empty</div>
+                ) : (
+                  <div style={{ height: "30px" }}></div>
+                )}
               </Form.Item>
 
               <Form.Item>
