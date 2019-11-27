@@ -5,7 +5,7 @@ import userTable from './UserTable'
 const mapStateToProps = state => {
     let {userTableReducer} = state  
     return {
-        user: userTableReducer.user,
+        users: userTableReducer.users,
         isLoading: userTableReducer.isLoading,
         isError: userTableReducer.isError,
         errorMessage: userTableReducer.errorMessage

@@ -1,7 +1,7 @@
 import { UserTableType } from "./UserTable.type";
 
 const initialState = {
-  user: [],
+  users: [],
   isLoading: false,
   isError: false,
   errorMessage: ""
@@ -18,7 +18,7 @@ export const userTableReducer = (state = initialState, action) => {
         isLoading: false,
         isError: false,
         errorMessage: "",
-        user: action.response
+        users: action.response
       };
     }
     case UserTableType.GetListUserFailure: {
@@ -39,7 +39,7 @@ export const userTableReducer = (state = initialState, action) => {
             isLoading: true,
             error: false,
             errorMessage: "",
-            user: state.user.filter(item => item.key !== action.response)
+            users: state.users.filter(item => item.key !== action.response)
         }
     }
     case UserTableType.DeleteUserFailure: {

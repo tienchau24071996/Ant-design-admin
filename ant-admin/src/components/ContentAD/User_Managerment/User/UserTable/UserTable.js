@@ -72,9 +72,9 @@ class UserTable extends PureComponent {
         width: 250
       },
       {
-        title: "Prenium",
-        dataIndex: "isPrenium",
-        key: "isPrenium"
+        title: "Premium",
+        dataIndex: "isPremium",
+        key: "isPremium"
       },
       {
         title: "Action",
@@ -90,7 +90,7 @@ class UserTable extends PureComponent {
                 </Popover>
               </NavLink>
               <Divider type="vertical" />
-              {this.props.user.length >= 1 ? (
+              {this.props.users.length >= 1 ? (
                 <Popconfirm
                   title="Sure to delete?"
                   onConfirm={this.handleDelete(record.key)}
@@ -167,11 +167,12 @@ class UserTable extends PureComponent {
         })
       };
     });
+    
     return (
       <div>
         <Table
           columns={columns}
-          dataSource={this.props.user}
+          dataSource={this.props.users}
           scroll={{ x: 1600 }}
           pagination={false}
           onRow={(record, index) => {

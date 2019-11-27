@@ -42,9 +42,9 @@ const formatData = userList => {
     birthday: item.birthday,
     companyName: item.companyName,
     gevmeEmail: item.gevmeEmail,
-    isPrenium: item.isPrenium ? "Yes" : "No",
+    isPremium: item.isPremium ? "Yes" : "No",
   }));
-};
+}
 
 const deleteUserRequest = () => ({
   type: UserTableType.DeleteUserRequest
