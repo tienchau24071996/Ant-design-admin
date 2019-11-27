@@ -15,7 +15,7 @@ class UserAdmin extends Component {
     super(props);
     this.columns = [
       {
-        title: "Fist Name",
+        title: "First Name",
         dataIndex: "first_name",
         key: "fistName"
       },

@@ -3,6 +3,7 @@ import { Form, Row, Col, Input, Select, DatePicker, Button, Icon } from "antd";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import validator from "validator";
+import  "./AdminUpdate.css"
 
 const dateFormat = ["MM/DD/YYYY", "MM/DD/YY"];
 const { Option } = Select;
@@ -12,7 +13,7 @@ export default class UpdateAdmin extends Component {
   state = {
     adminUpdate: {},
     emailError: false,
-    TestBirthday: false
+    ischeckBirthday: false
   };
 
   componentDidMount() {
@@ -43,19 +44,19 @@ export default class UpdateAdmin extends Component {
       }
     }));
     if (yearnew > yearnow) {
-      this.setState({ TestBirthday: true });
+      this.setState({ ischeckBirthday: true });
     } else if (yearnew < yearnow) {
-      this.setState({ TestBirthday: false });
-    } else if ((yearnew = yearnow)) {
+      this.setState({ ischeckBirthday: false });
+    } else if (yearnew === yearnow) {
       if (monthnew < monthnow) {
-        this.setState({ TestBirthday: false });
+        this.setState({ ischeckBirthday: false });
       } else if (monthnew > monthnow) {
-        this.setState({ TestBirthday: true });
-      } else if ((monthnew = monthnow)) {
-        if (daynew >= daynow) {
-          this.setState({ TestBirthday: true });
-        } else if (datenew < datenow) {
-          this.setState({ TestBirthday: false });
+        this.setState({ ischeckBirthday: true });
+      } else if (monthnew === monthnow) {
+        if (daynew > daynow) {
+          this.setState({ ischeckBirthday: true });
+        } else if (datenew <= datenow) {
+          this.setState({ ischeckBirthday: false });
         }
       }
     }
@@ -102,7 +103,8 @@ export default class UpdateAdmin extends Component {
   };
 
   render() {
-    let { emailError, TestBirthday, adminUpdate } = this.state;
+    let { emailError, ischeckBirthday, adminUpdate } = this.state;
+    const isCheckFirstName = !this.props.isLoading && !adminUpdate.first_name;
     return (
       <div>
         <ButtonGroup style={{ marginBottom: 16 }}>
@@ -121,13 +123,16 @@ export default class UpdateAdmin extends Component {
                   <Form.Item style={{ marginBottom: "0px" }}>
                     <span>First name</span>
                     <Input
+                      className={isCheckFirstName ? "inputFirstName" : null}
                       name="first_name"
                       onChange={this.handleChange}
                       value={adminUpdate.first_name}
+                      autoComplete="true"
                     />
-                    {!this.props.isLoading &&
-                    !this.state.adminUpdate.first_name ? (
-                      <div style={{ height: "30px", color:"red" }}>Can't empty</div>
+                    {isCheckFirstName ? (
+                      <div style={{ height: "30px", color: "red" }}>
+                        Can't empty
+                      </div>
                     ) : (
                       <div style={{ height: "30px" }}></div>
                     )}
@@ -143,7 +148,9 @@ export default class UpdateAdmin extends Component {
                     />
                     {!this.props.isLoading &&
                     !this.state.adminUpdate.last_name ? (
-                      <div style={{ height: "30px", color:"red" }}>Can't empty</div>
+                      <div style={{ height: "30px", color: "red" }}>
+                        Can't empty
+                      </div>
                     ) : (
                       <div style={{ height: "30px" }}></div>
                     )}
@@ -162,7 +169,7 @@ export default class UpdateAdmin extends Component {
                     >
                       <Option value="Male">Male</Option>
                       <Option value="Female">Female</Option>
-                      <Option value="Custom">Custom</Option>
+                      <Option value="Other">Other</Option>
                     </Select>
                   </Form.Item>
                 </Col>
@@ -180,7 +187,7 @@ export default class UpdateAdmin extends Component {
                           : null
                       }
                     />
-                    {TestBirthday ? (
+                    {ischeckBirthday ? (
                       <div style={{ color: "red" }}>
                         Invalid birthday, please enter again
                       </div>
@@ -211,7 +218,9 @@ export default class UpdateAdmin extends Component {
                   value={adminUpdate.country}
                 />
                 {!this.props.isLoading && !this.state.adminUpdate.country ? (
-                  <div style={{ height: "30px", color:"red" }}>Can't empty</div>
+                  <div style={{ height: "30px", color: "red" }}>
+                    Can't empty
+                  </div>
                 ) : (
                   <div style={{ height: "30px" }}></div>
                 )}

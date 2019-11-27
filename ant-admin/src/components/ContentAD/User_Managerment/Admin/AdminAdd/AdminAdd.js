@@ -29,8 +29,13 @@ export default class AddAdmin extends Component {
       gender: "",
       birthday: null,
     },
-    Testbirthday: false,
+    ischeckBirthday: false,
     emailError: false,
+    first_nameError: false,
+    last_nameError: false,
+    genderError: false,
+    countryError: false,
+    companyError: false
   };
 
   handleAdd = () => {
@@ -53,19 +58,19 @@ export default class AddAdmin extends Component {
       }
     }));
     if (yearnew > yearnow) {
-      this.setState({ Testbirthday: true });
+      this.setState({ ischeckBirthday: true });
     } else if (yearnew < yearnow) {
-      this.setState({ Testbirthday: false });
+      this.setState({ ischeckBirthday: false });
     } else if ((yearnew = yearnow)) {
       if (monthnew < monthnow) {
-        this.setState({ Testbirthday: false });
+        this.setState({ ischeckBirthday: false });
       } else if (monthnew > monthnow) {
-        this.setState({ Testbirthday: true });
+        this.setState({ ischeckBirthday: true });
       } else if ((monthnew = monthnow)) {
         if (daynew >= daynow) {
-          this.setState({ Testbirthday: true });
+          this.setState({ ischeckBirthday: true });
         } else if (datenew < datenow) {
-          this.setState({ Testbirthday: false });
+          this.setState({ ischeckBirthday: false });
         }
       }
     }
@@ -107,9 +112,11 @@ export default class AddAdmin extends Component {
     });
   };
 
+ 
+
   render() {
-    let { emailError, Testbirthday, dataAdmin } = this.state;
-    const disabled = (!Testbirthday &&
+    let { emailError, ischeckBirthday, dataAdmin } = this.state;   
+    const disabled = (!ischeckBirthday &&
       !emailError &&
       dataAdmin.first_name &&
       dataAdmin.last_name &&
@@ -117,6 +124,7 @@ export default class AddAdmin extends Component {
       dataAdmin.email &&
       dataAdmin.birthday &&
       dataAdmin.company) ? false : true
+      
     return (
       <div>
         <ButtonGroup style={{ marginBottom: 16 }}>
@@ -181,7 +189,7 @@ export default class AddAdmin extends Component {
                   format={dateFormatList}
                   style={{ width: "100%" }}
                 />
-                {Testbirthday ? (
+                {ischeckBirthday ? (
                   <div style={{ color: "red" }}>
                     Invalid birthday, please enter again
                   </div>
