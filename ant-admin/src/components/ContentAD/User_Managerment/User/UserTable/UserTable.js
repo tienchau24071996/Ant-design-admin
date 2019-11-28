@@ -72,9 +72,9 @@ class UserTable extends PureComponent {
         width: 250
       },
       {
-        title: "Prenium",
-        dataIndex: "isPrenium",
-        key: "isPrenium"
+        title: "Premium",
+        dataIndex: "isPremium",
+        key: "isPremium"
       },
       {
         title: "Action",
@@ -90,16 +90,15 @@ class UserTable extends PureComponent {
                 </Popover>
               </NavLink>
               <Divider type="vertical" />
-              {this.props.user.length >= 1 ? (
+              {this.props.users.length >= 1 ? (
                 <Popconfirm
                   title="Sure to delete?"
                   onConfirm={this.handleDelete(record.key)}
                   onCancel={this._onCancel}
                 >
-                    <Popover content={deleteUser} onClick={this._preventEvent}>
-                      <Icon style={{color:"#1890ff"}} type="delete" />
-                    </Popover>
-
+                  <Popover content={deleteUser} onClick={this._preventEvent}>
+                    <Icon style={{ color: "#1890ff" }} type="delete" />
+                  </Popover>
                 </Popconfirm>
               ) : null}
             </span>
@@ -110,25 +109,26 @@ class UserTable extends PureComponent {
   }
 
   state = {
-    currentPage: 1
-  }
-  
+    currentPage: 1,
+    persons: []
+  };
+
   componentDidMount() {
-    this.getPageUrl()
+    this.getPageUrl();
   }
 
   handleDelete = key => event => {
-    event.stopPropagation()
+    event.stopPropagation();
     this.props.onDeleteUser(key, () => {
-      this.props.onGetListUser(this.state.currentPage)
-    })
+      this.props.onGetListUser(this.state.currentPage);
+    });
   };
 
-  handlePagination = (page, pageSize) => {    
+  handlePagination = (page, pageSize) => {
     this.setState({
-      currentPage : Number(page)
-    })
-    this.props.onGetListUser(page)
+      currentPage: Number(page)
+    });
+    this.props.onGetListUser(page);
     this.props.history.push(`/managerment/user?page=${page}`);
   };
 
@@ -136,25 +136,23 @@ class UserTable extends PureComponent {
     const url = window.location;
     const urlString = new URL(url);
     const page = urlString.searchParams.get("page");
-    let checkPage = page
-    if (page > 3)
-       checkPage = 3
-    else if (page < 1)
-        checkPage = 1
-    this.handlePagination(checkPage)
+    let checkPage = page;
+    if (page > 3) checkPage = 3;
+    else if (page < 1) checkPage = 1;
+    this.handlePagination(checkPage);
     this.setState({
       currentPage: Number(checkPage)
-    })
-  }
-  
+    });
+  };
+
   _onCancel = event => {
-    event.stopPropagation()
-  }
-  
+    event.stopPropagation();
+  };
+
   _preventEvent = event => {
-    event.stopPropagation()
-  }
-  
+    event.stopPropagation();
+  };
+
   render() {
     const columns = this.columns.map(col => {
       if (!col.editable) {
@@ -165,25 +163,26 @@ class UserTable extends PureComponent {
         onCell: record => ({
           record,
           dataIndex: col.dataIndex,
-          title: col.title,
+          title: col.title
         })
       };
     });
+    
     return (
-      <div> 
+      <div>
         <Table
           columns={columns}
-          dataSource={this.props.user}
+          dataSource={this.props.users}
           scroll={{ x: 1600 }}
           pagination={false}
-          onRow={(record , index) => {
+          onRow={(record, index) => {
             return {
               onClick: () => {
                 this.props.history.push(
                   `/managerment/user/update?id=${record.id}`
-                )
+                );
               }
-            }
+            };
           }}
         ></Table>
         <Pagination
@@ -198,5 +197,4 @@ class UserTable extends PureComponent {
   }
 }
 
-export default withRouter(UserTable)
-
+export default withRouter(UserTable);

@@ -1,9 +1,9 @@
 export const UserUpdateType = {
-    getUserRequest:"UserUpdate/GetUser/REQUEST",
-    getUserSuccess:"UserUpdate/GetUser/SUCCESS",
-    getUserFailure:"UserUpdate/GetUser/FAILURE",
+    GetUserRequest:"userUpdate/getUser/REQUEST",
+    GetUserSuccess:"userUpdate/getUser/SUCCESS",
+    GetUserFailure:"userUpdate/getUser/FAILURE",
 
-    updateUserRequest:"UserUpdate/UpdateUser/REQUEST",
-    updateUserSuccess:"UserUpdate/UpdateUser/SUCCESS",
-    updateUserFailure:"UserUpdate/UpdateUser/FAILURE"
+    UpdateUserRequest:"userUpdate/updateUser/REQUEST",
+    UpdateUserSuccess:"userUpdate/updateUser/SUCCESS",
+    UpdateUserFailure:"userUpdate/updateUser/FAILURE"
 }

@@ -2,16 +2,16 @@ import { UserUpdateType } from "./UserUpdate.type";
 import axios from "axios";
 
 const getUserRequest = () => ({
-  type: UserUpdateType.getUserRequest
+  type: UserUpdateType.GetUserRequest
 });
 
 const getUserSuccess = response => ({
-  type: UserUpdateType.getUserSuccess,
+  type: UserUpdateType.GetUserSuccess,
   response
 });
 
 const getUserFailure = error => ({
-  type: UserUpdateType.getUserFailure,
+  type: UserUpdateType.GetUserFailure,
   error
 });
 
@@ -38,16 +38,16 @@ const getInfoURL = () => {
 };
 
 const updateUserRequest = () => ({
-  type: UserUpdateType.updateUserRequest
+  type: UserUpdateType.UpdateUserRequest
 });
 
 const updateUserSuccess = response => ({
-  type: UserUpdateType.updateUserSuccess,
+  type: UserUpdateType.UpdateUserSuccess,
   response
 });
 
 const updateUserFailure = error => ({
-  type: UserUpdateType.updateUserFailure,
+  type: UserUpdateType.UpdateUserFailure,
   error
 });
 

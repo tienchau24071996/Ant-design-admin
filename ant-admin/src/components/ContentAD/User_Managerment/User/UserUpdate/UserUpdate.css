@@ -18,3 +18,57 @@
     height: 104px;
     object-fit: cover;
 }
+
+.inputFirstName {
+    border: 1px solid #f5222d
+}
+
+.inputFirstName:hover {
+    border: 1px solid #f5222d
+}
+
+.inputFirstName:focus {
+    box-shadow: 0 0 0 2px #f5222d33;
+    border: 1px solid #f5222d
+}
+
+.inputLastName {
+    border: 1px solid #f5222d
+}
+
+.inputLastName:hover {
+    border: 1px solid #f5222d
+}
+
+.inputLastName:focus {
+    box-shadow: 0 0 0 2px #f5222d33;
+    border: 1px solid #f5222d
+}
+
+
+.inputCountry {
+    border: 1px solid #f5222d
+}
+
+.inputCountry:hover {
+    border: 1px solid #f5222d
+}
+
+.inputCountry:focus {
+    box-shadow: 0 0 0 2px #f5222d33;
+    border: 1px solid #f5222d
+}
+
+
+.inputEmail {
+    border: 1px solid #f5222d
+}
+
+.inputEmail:hover {
+    border: 1px solid #f5222d
+}
+
+.inputEmail:focus {
+    box-shadow: 0 0 0 2px #f5222d33;
+    border: 1px solid #f5222d
+}

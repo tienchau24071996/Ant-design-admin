@@ -12,8 +12,9 @@ import {
   Icon,
   message
 } from "antd";
-import moment from "moment"
-import "./UserUpdate.css"
+import moment from "moment";
+import validator from "validator";
+import "./UserUpdate.css";
 
 const { Option } = Select;
 const dateFormat = "MM/DD/YYYY";
@@ -39,15 +40,19 @@ function beforeUpload(file) {
 export default class UserUpdate extends Component {
   state = {
     loading: false,
-    userUpdate: {}
+    userUpdate: {
+      firstName: ""
+    },
+    isCheckBirthday: false,
+    isErrorEmail: false
   };
 
   componentDidMount() {
-    this.handleUser()
+    this.handleUser();
   }
 
   handleUser = () => {
-    this.props.onGetUser((data) => {
+    this.props.onGetUser(data => {
       this.setState({
         userUpdate: data
       });
@@ -64,6 +69,23 @@ export default class UserUpdate extends Component {
     }));
   };
 
+  handleErrorEmail = value => {
+    this.setState({
+      isErrorEmail: !validator.isEmail(value)
+    });
+  };
+
+  handleChangeEmail = event => {
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      userUpdate: {
+        ...prevState.userUpdate,
+        [name]: value
+      }
+    }));
+    this.handleErrorEmail(value);
+  };
+
   handleChangeSelect = event => {
     this.setState(prevState => ({
       userUpdate: {
@@ -73,11 +95,39 @@ export default class UserUpdate extends Component {
     }));
   };
 
-  handleChangeDate = (event, t) => {
+  handleChangeDate = (event, dateString) => {
+    let dateNow = new Date();
+    let yearNow = dateNow.getFullYear();
+    let monthNow = dateNow.getUTCMonth() + 1;
+    let dayNow = ("0" + dateNow.getDate()).slice(-2);
+
+    let dateNew = event._d;
+    let yearNew = dateNew.getFullYear();
+    let monthNew = dateNew.getUTCMonth() + 1;
+    let dayNew = ("0" + dateNew.getDate()).slice(-2);
+
+    if (yearNew < yearNow) {
+      this.setState({ isCheckBirthday: false });
+    } else if (yearNew > yearNow) {
+      this.setState({ isCheckBirthday: true });
+    } else if (yearNew === yearNow) {
+      if (monthNew < monthNow) {
+        this.setState({ isCheckBirthday: false });
+      } else if (monthNew > monthNow) {
+        this.setState({ isCheckBirthday: true });
+      } else if (monthNew === monthNow) {
+        if (dayNew <= dayNow) {
+          this.setState({ isCheckBirthday: false });
+        } else {
+          this.setState({ isCheckBirthday: true });
+        }
+      }
+    }
+
     this.setState(prevState => ({
       userUpdate: {
         ...prevState.userUpdate,
-        birthday: t
+        birthday: dateString
       }
     }));
   };
@@ -115,13 +165,25 @@ export default class UserUpdate extends Component {
   };
 
   render() {
-    const { imageUrl, userUpdate } = this.state;
+    const { imageUrl, userUpdate, isCheckBirthday, isErrorEmail } = this.state;
+    const { isLoading, isError } = this.props;
+    const checkFirstName = !isLoading && !userUpdate.firstName;
+    const checkLastName = !isLoading && !userUpdate.lastName;
+    const checkCountry = !isLoading && !userUpdate.country;
+
+    const checkButtonUpdate =
+      !userUpdate.firstName ||
+      !userUpdate.lastName ||
+      !userUpdate.country ||
+      isCheckBirthday ||
+      isErrorEmail;
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? "loading" : "plus"} />
         <div className="ant-upload-text">Upload Avatar</div>
       </div>
-    );  
+    );
+
     return (
       <div style={{ paddingTop: "14px" }}>
         <Form>
@@ -153,23 +215,41 @@ export default class UserUpdate extends Component {
             <Col xs={24} sm={24} md={18}>
               <Row>
                 <Col span={12} style={{ paddingRight: "30px" }}>
-                  <Form.Item>
+                  <Form.Item style={{ margin: 0 }}>
                     <span>First name</span>
                     <Input
-                      name="first_name"
-                      value={userUpdate.first_name}
+                      className={checkFirstName ? "inputFirstName" : null}
+                      name="firstName"
+                      value={userUpdate.firstName}
                       onChange={this.handleChange}
+                      autoComplete={"off"}
                     />
+                    {checkFirstName ? (
+                      <div style={{ color: "#f5222d" }}>
+                        Invalid first name, please enter again
+                      </div>
+                    ) : (
+                      <div style={{ height: "40px" }}></div>
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item>
+                  <Form.Item style={{ margin: 0 }}>
                     <span>Last name</span>
                     <Input
-                      name="last_name"
-                      value={userUpdate.last_name}
+                      className={checkLastName ? "inputLastName" : null}
+                      name="lastName"
+                      value={userUpdate.lastName}
                       onChange={this.handleChange}
+                      autoComplete={"off"}
                     />
+                    {checkLastName ? (
+                      <div style={{ color: "#f5222d" }}>
+                        Invalid last name, please enter again
+                      </div>
+                    ) : (
+                      <div style={{ height: "40px" }}></div>
+                    )}
                   </Form.Item>
                 </Col>
               </Row>
@@ -190,7 +270,7 @@ export default class UserUpdate extends Component {
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item>
+                  <Form.Item style={{ margin: 0 }}>
                     <span>Birthday</span>
                     <DatePicker
                       name="date"
@@ -203,26 +283,51 @@ export default class UserUpdate extends Component {
                       onChange={this.handleChangeDate}
                       style={{ width: "100%" }}
                     />
+                    {isCheckBirthday ? (
+                      <div style={{ color: "#f5222d" }}>
+                        Invalid birthday, date must be smaller than current date
+                      </div>
+                    ) : (
+                      <div style={{ height: "40px" }}></div>
+                    )}
                   </Form.Item>
                 </Col>
               </Row>
 
-              <Form.Item>
+              <Form.Item style={{ margin: 0 }}>
                 <span>Email</span>
                 <Input
+                  className={isErrorEmail ? "inputEmail" : null}
                   name="email"
-                  onChange={this.handleChange}
+                  onChange={this.handleChangeEmail}
                   value={userUpdate.email}
+                  autoComplete={"off"}
                 />
+                {isErrorEmail ? (
+                  <div style={{ color: "#f5222d" }}>
+                    Invalid email, please enter again
+                  </div>
+                ) : (
+                  <div style={{ height: "40px" }}></div>
+                )}
               </Form.Item>
 
-              <Form.Item>
+              <Form.Item style={{ margin: 0 }}>
                 <span>Country</span>
                 <Input
+                  className={checkCountry ? "inputCountry" : null}
                   name="country"
                   onChange={this.handleChange}
                   value={userUpdate.country}
+                  autoComplete={"off"}
                 />
+                {checkCountry ? (
+                  <div style={{ color: "#f5222d" }}>
+                    Invalid country, please enter again
+                  </div>
+                ) : (
+                  <div style={{ height: "40px" }}></div>
+                )}
               </Form.Item>
 
               <Form.Item>
@@ -231,22 +336,33 @@ export default class UserUpdate extends Component {
               </Form.Item>
 
               <Form.Item>
-                <span>Prenium</span>
-                <Input value={userUpdate.prenium ? "Yes" : "No"} disabled />
+                <span>Premium</span>
+                <Input value={userUpdate.isPremium ? "Yes" : "No"} disabled />
               </Form.Item>
 
               <Form.Item style={{ textAlign: "right" }}>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={this._onSubmit(
-                    !this.props.isLoading && this.props.isError
-                      ? "error"
-                      : "success"
-                  )}
-                >
-                  Update
-                </Button>
+                {checkButtonUpdate ? (
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this._onSubmit(
+                      !isLoading && isError ? "error" : "success"
+                    )}
+                    disabled
+                  >
+                    Update
+                  </Button>
+                ) : (
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this._onSubmit(
+                      !isLoading && isError ? "error" : "success"
+                    )}
+                  >
+                    Update
+                  </Button>
+                )}
               </Form.Item>
             </Col>
           </Row>

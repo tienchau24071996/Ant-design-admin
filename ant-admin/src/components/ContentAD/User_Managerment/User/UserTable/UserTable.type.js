@@ -1,9 +1,9 @@
 export const UserTableType = {
-    getListUserRequest:"UserTable/GetData/REQUEST",
-    getListUserSuccess:"UserTable/GetData/SUCCESS",
-    getListUserFailure:"UserTable/GetData/FAILURE",
+    GetListUserRequest: "userTable/getData/REQUEST",
+    GetListUserSuccess: "userTable/getData/SUCCESS",
+    GetListUserFailure: "userTable/getData/FAILURE",
 
-    deleteUserRequest:"UserTable/Delete/REQUEST",
-    deleteUserSuccess:"UserTable/Delete/SUCCESS",
-    deleteUserFailure:"UserTable/Delete/FAILURE",
+    DeleteUserRequest: "userTable/delete/REQUEST",
+    DeleteUserSuccess: "userTable/delete/SUCCESS",
+    DeleteUserFailure: "userTable/delete/FAILURE",
 }
