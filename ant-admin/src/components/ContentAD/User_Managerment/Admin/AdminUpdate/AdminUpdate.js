@@ -3,7 +3,7 @@ import { Form, Row, Col, Input, Select, DatePicker, Button, Icon } from "antd";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import validator from "validator";
-import  "./AdminUpdate.css"
+import "./AdminUpdate.css";
 
 const dateFormat = ["MM/DD/YYYY", "MM/DD/YY"];
 const { Option } = Select;
@@ -105,11 +105,13 @@ export default class UpdateAdmin extends Component {
   render() {
     let { emailError, ischeckBirthday, adminUpdate } = this.state;
     const isCheckFirstName = !this.props.isLoading && !adminUpdate.first_name;
+    const isCheckLastName = !this.props.isLoading && !adminUpdate.last_name;
+    const ischeckCountry = !this.props.isLoading && !adminUpdate.country;
     return (
       <div>
         <ButtonGroup style={{ marginBottom: 16 }}>
           <NavLink to="/managerment/admin">
-            <Button type="primary">
+            <Button type="primary" style={{ borderRadius: "6px" }}>
               <Icon type="left" />
               <span style={{ fontSize: "16px" }}>Back</span>
             </Button>
@@ -142,12 +144,12 @@ export default class UpdateAdmin extends Component {
                   <Form.Item style={{ marginBottom: "0px" }}>
                     <span>Last name</span>
                     <Input
+                      className={isCheckLastName ? "inputLastName" : null}
                       name="last_name"
                       onChange={this.handleChange}
                       value={adminUpdate.last_name}
                     />
-                    {!this.props.isLoading &&
-                    !this.state.adminUpdate.last_name ? (
+                    {isCheckLastName ? (
                       <div style={{ height: "30px", color: "red" }}>
                         Can't empty
                       </div>
@@ -199,6 +201,7 @@ export default class UpdateAdmin extends Component {
               <Form.Item>
                 <span>Email</span>
                 <Input
+                  className={emailError ? "inputEmail" : null}
                   name="email"
                   onChange={this.handleChangeEmail}
                   value={adminUpdate.email}
@@ -213,11 +216,12 @@ export default class UpdateAdmin extends Component {
               <Form.Item>
                 <span>Country</span>
                 <Input
+                  className={ischeckCountry ? "inputCountry" : null}
                   name="country"
                   onChange={this.handleChange}
                   value={adminUpdate.country}
                 />
-                {!this.props.isLoading && !this.state.adminUpdate.country ? (
+                {ischeckCountry ? (
                   <div style={{ height: "30px", color: "red" }}>
                     Can't empty
                   </div>
