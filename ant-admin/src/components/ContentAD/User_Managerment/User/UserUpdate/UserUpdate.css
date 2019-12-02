@@ -72,3 +72,17 @@
     box-shadow: 0 0 0 2px #f5222d33;
     border: 1px solid #f5222d
 }
+
+.inputBirthday .ant-input {
+    border: 1px solid #f5222d; 
+    border-radius: 6px
+}
+
+.inputBirthday .ant-input:focus {
+    border: 1px solid #f5222d;
+    box-shadow: 0 0 0 2px #f5222d33
+}
+
+.inputBirthday .ant-input:hover {
+    border: 1px solid #f5222d;
+}

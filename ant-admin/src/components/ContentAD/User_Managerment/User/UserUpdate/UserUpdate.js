@@ -14,6 +14,7 @@ import {
 } from "antd";
 import moment from "moment";
 import validator from "validator";
+import { countryList } from "./countryList";
 import "./UserUpdate.css";
 
 const { Option } = Select;
@@ -44,7 +45,8 @@ export default class UserUpdate extends Component {
       firstName: ""
     },
     isCheckBirthday: false,
-    isErrorEmail: false
+    isErrorEmail: false,
+    countrySelect: ''
   };
 
   componentDidMount() {
@@ -95,16 +97,27 @@ export default class UserUpdate extends Component {
     }));
   };
 
+  handleChangeCountry = event => {
+    console.log(event);
+    
+    this.setState(prevState => ({
+      userUpdate: {
+        ...prevState.userUpdate,
+        country: event
+      }
+    }));
+  };
+
   handleChangeDate = (event, dateString) => {
     let dateNow = new Date();
-    let yearNow = dateNow.getFullYear();
-    let monthNow = dateNow.getUTCMonth() + 1;
+    let yearNow = dateNow.getFullYear().toString();
+    let monthNow = (dateNow.getUTCMonth() + 1).toString();
     let dayNow = ("0" + dateNow.getDate()).slice(-2);
 
-    let dateNew = event._d;
-    let yearNew = dateNew.getFullYear();
-    let monthNew = dateNew.getUTCMonth() + 1;
-    let dayNew = ("0" + dateNew.getDate()).slice(-2);
+    let dateNew = dateString;
+    let yearNew = dateNew.slice(6, 10);
+    let monthNew = dateNew.slice(0, 2);
+    let dayNew = dateNew.slice(3, 5);
 
     if (yearNew < yearNow) {
       this.setState({ isCheckBirthday: false });
@@ -164,12 +177,19 @@ export default class UserUpdate extends Component {
     }
   };
 
+  selectCountry(val) {
+    this.setState({ country: val });
+  }
+
+  selectRegion(val) {
+    this.setState({ region: val });
+  }
+
   render() {
     const { imageUrl, userUpdate, isCheckBirthday, isErrorEmail } = this.state;
     const { isLoading, isError } = this.props;
     const checkFirstName = !isLoading && !userUpdate.firstName;
     const checkLastName = !isLoading && !userUpdate.lastName;
-    const checkCountry = !isLoading && !userUpdate.country;
 
     const checkButtonUpdate =
       !userUpdate.firstName ||
@@ -253,7 +273,6 @@ export default class UserUpdate extends Component {
                   </Form.Item>
                 </Col>
               </Row>
-
               <Row>
                 <Col span={12} style={{ paddingRight: "30px" }}>
                   <Form.Item>
@@ -273,6 +292,7 @@ export default class UserUpdate extends Component {
                   <Form.Item style={{ margin: 0 }}>
                     <span>Birthday</span>
                     <DatePicker
+                      className={isCheckBirthday ? "inputBirthday" : null}
                       name="date"
                       value={
                         !userUpdate.birthday
@@ -293,7 +313,6 @@ export default class UserUpdate extends Component {
                   </Form.Item>
                 </Col>
               </Row>
-
               <Form.Item style={{ margin: 0 }}>
                 <span>Email</span>
                 <Input
@@ -305,41 +324,43 @@ export default class UserUpdate extends Component {
                 />
                 {isErrorEmail ? (
                   <div style={{ color: "#f5222d" }}>
-                    Invalid email, please enter again
+                    Invalid email, please enter again, example: abc@gmail.com
                   </div>
                 ) : (
                   <div style={{ height: "40px" }}></div>
                 )}
               </Form.Item>
-
               <Form.Item style={{ margin: 0 }}>
                 <span>Country</span>
-                <Input
-                  className={checkCountry ? "inputCountry" : null}
+                <Select
+                  showSearch
+                  optionFilterProp="children"
                   name="country"
-                  onChange={this.handleChange}
+                  onChange={this.handleChangeCountry}
                   value={userUpdate.country}
-                  autoComplete={"off"}
-                />
-                {checkCountry ? (
-                  <div style={{ color: "#f5222d" }}>
-                    Invalid country, please enter again
-                  </div>
-                ) : (
-                  <div style={{ height: "40px" }}></div>
-                )}
+                  filterOption={(input, option) =>
+                    option.props.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {countryList.length > 0 &&
+                    countryList.map((item, key) => (
+                      <Option value={item} key={key}>
+                        {item}
+                      </Option>
+                    ))}
+                </Select>
               </Form.Item>
 
-              <Form.Item>
+              <Form.Item style={{margin: "40px 0px"}}>
                 <span>Gev me email</span>
                 <Input value={userUpdate.gevmeEmail} disabled />
               </Form.Item>
-
               <Form.Item>
                 <span>Premium</span>
                 <Input value={userUpdate.isPremium ? "Yes" : "No"} disabled />
               </Form.Item>
-
               <Form.Item style={{ textAlign: "right" }}>
                 {checkButtonUpdate ? (
                   <Button
